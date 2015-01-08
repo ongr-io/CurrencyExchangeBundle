@@ -14,6 +14,7 @@
         "symfony/symfony": "~2.6"
     },
     "require-dev": {
+        "guzzlehttp/guzzle": "4.*",
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
