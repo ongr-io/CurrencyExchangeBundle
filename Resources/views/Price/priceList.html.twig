@@ -1,0 +1,7 @@
+{% block price %}
+    {% spaceless %}
+        {% for currency in currencies %}
+            <span class="currency currency-{{ currency.tla }}">{{ currency.stringValue }}</span>
+        {% endfor %}
+    {% endspaceless %}
+{% endblock %}

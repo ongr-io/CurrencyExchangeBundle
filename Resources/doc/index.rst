@@ -1,1 +1,1 @@
-Complete documentation will be available soon.
+Documentation will be soon.

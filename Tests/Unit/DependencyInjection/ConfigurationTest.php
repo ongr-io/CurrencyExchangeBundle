@@ -20,15 +20,13 @@ use Symfony\Component\Config\Definition\Processor;
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Simple test configuration.
+     * Tests configuration.
      */
     public function testConfiguration()
     {
         $processor = new Processor();
-        $processedConfig = $processor->processConfiguration(new Configuration(), [[]]);
-        $this->assertEquals(
-            $processedConfig,
-            []
-        );
+        $processorConfig = $processor->processConfiguration(new Configuration(), [[]]);
+        $expectedConfiguration = ['currency' => ['default' => 'EUR']];
+        $this->assertEquals($processorConfig, $expectedConfiguration);
     }
 }

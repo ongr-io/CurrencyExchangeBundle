@@ -27,9 +27,42 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ongr_currency_exchange');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode->children()
+            ->arrayNode('currency')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('default')
+                        ->defaultValue('EUR')
+                        ->info('set default currency')
+                ->end()
+                ->arrayNode('exchange')
+                    ->children()
+                        ->booleanNode('live_load')
+                            ->defaultTrue()
+                            ->info('set to false if we do not want to load currencies on request')
+                        ->end()
+                        ->scalarNode('cache')
+                            ->isRequired()
+                            ->info('set cache pool service id')
+                            ->example('stash.memcache')
+                        ->end()
+                        ->arrayNode('driver')
+                            ->children()
+                                ->arrayNode('open_exchange_rates')
+                                    ->children()
+                                        ->scalarNode('app_id')
+                                            ->isRequired()
+                                            ->info('set api key from openexchangerates.org')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                                ->scalarNode('custom')->info('set custom service id for driver')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+            ->end();
         return $treeBuilder;
     }
 }
