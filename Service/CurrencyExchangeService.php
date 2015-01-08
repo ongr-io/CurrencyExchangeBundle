@@ -14,11 +14,10 @@ namespace ONGR\CurrencyExchangeBundle\Service;
 use ONGR\CurrencyExchangeBundle\Exception\UndefinedCurrencyException;
 
 /**
- * This class handles currency rates download and exchange
+ * This class handles currency rates download and exchange.
  */
 class CurrencyExchangeService
 {
-
     /**
      * @var CurrencyRatesService
      */
@@ -31,7 +30,7 @@ class CurrencyExchangeService
 
     /**
      * @param CurrencyRatesService $rates
-     * @param $defaultCurrency
+     * @param string               $defaultCurrency
      */
     public function __construct(CurrencyRatesService $rates, $defaultCurrency)
     {
@@ -40,8 +39,10 @@ class CurrencyExchangeService
     }
 
     /**
-     * @throws UndefinedCurrencyException
      * @param string $currency
+     *
+     * @throws UndefinedCurrencyException
+     *
      * @return float
      */
     public function getCurrencyRate($currency)
@@ -52,7 +53,7 @@ class CurrencyExchangeService
             return $rates[$currency];
         }
 
-        throw new UndefinedCurrencyException('Currency ' . $currency .' not found.');
+        throw new UndefinedCurrencyException('Currency ' . $currency . ' not found.');
     }
 
     /**
@@ -64,9 +65,12 @@ class CurrencyExchangeService
     }
 
     /**
+     * This function calculate rates.
+     *
      * @param float|int $amount
-     * @param string $toCurrency
-     * @param null $fromCurrency
+     * @param string    $toCurrency
+     * @param null      $fromCurrency
+     *
      * @return float
      */
     public function calculateRate($amount, $toCurrency, $fromCurrency = null)

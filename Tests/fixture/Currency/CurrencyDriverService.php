@@ -9,16 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\CurrencyExchangeBundle\Tests\Fixtures\Currency;
+namespace ONGR\CurrencyExchangeBundle\Tests\fixture\Currency;
 
-use ONGR\CurrencyExchangeBundle\Currency\DriversGetterInterface;
+use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 
 /**
- * This class provides fixture for currency getter
+ * This class provides fixture for currency getter.
  */
-class CurrencyGetterService implements DriversGetterInterface
+class CurrencyDriverService implements CurrencyDriverInterface
 {
-
     /**
      * {@inheritdoc}
      */
@@ -27,7 +26,7 @@ class CurrencyGetterService implements DriversGetterInterface
         return [
             'EUR' => 1,
             'USD' => 1.3345,
-            'LTL' => 3.4546
+            'LTL' => 3.4546,
         ];
     }
 

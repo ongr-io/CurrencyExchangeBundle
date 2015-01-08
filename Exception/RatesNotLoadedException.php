@@ -12,7 +12,7 @@
 namespace ONGR\CurrencyExchangeBundle\Exception;
 
 /**
- * This exception is thrown when we try to retrieve currency rates while it's not loaded
+ * This exception is thrown when we try to retrieve currency rates while it's not loaded.
  */
 class RatesNotLoadedException extends \RuntimeException
 {

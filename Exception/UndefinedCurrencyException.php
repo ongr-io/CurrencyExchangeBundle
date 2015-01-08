@@ -12,7 +12,7 @@
 namespace ONGR\CurrencyExchangeBundle\Exception;
 
 /**
- * This exceptions is thrown when we request for currency that does not exists
+ * This exceptions is thrown when we request for currency that does not exists.
  */
 class UndefinedCurrencyException extends \UnexpectedValueException
 {

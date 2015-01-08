@@ -11,7 +11,7 @@
 
 namespace ONGR\CurrencyExchangeBundle\Service;
 
-use ONGR\CurrencyExchangeBundle\Currency\DriversGetterInterface;
+use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -19,13 +19,12 @@ use Stash\Interfaces\ItemInterface;
 use Stash\Interfaces\PoolInterface;
 
 /**
- * This class provides currency rates
+ * This class provides currency rates.
  */
 class CurrencyRatesService implements LoggerAwareInterface
 {
-
     /**
-     * @var DriversGetterInterface
+     * @var CurrencyDriverInterface
      */
     protected $driver;
 
@@ -50,11 +49,11 @@ class CurrencyRatesService implements LoggerAwareInterface
     protected $logger;
 
     /**
-     * @param DriversGetterInterface $driver
-     * @param PoolInterface $pool Cache pool
-     * @param bool $poorManLoad set to true if we want to load currencies on request
+     * @param CurrencyDriverInterface $driver      Currency exchange driver.
+     * @param PoolInterface           $pool        Cache pool.
+     * @param bool                    $poorManLoad Set to true if we want to load currencies on request.
      */
-    public function __construct(DriversGetterInterface $driver, PoolInterface $pool, $poorManLoad = true)
+    public function __construct(CurrencyDriverInterface $driver, PoolInterface $pool, $poorManLoad = true)
     {
         $this->driver = $driver;
         $this->pool = $pool;
@@ -70,9 +69,9 @@ class CurrencyRatesService implements LoggerAwareInterface
     }
 
     /**
-     * This method returns exchange rates
+     * This method returns exchange rates.
      *
-     * @throws \ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException
+     * @throws RatesNotLoadedException
      * @return array
      */
     public function getRates()
@@ -100,7 +99,7 @@ class CurrencyRatesService implements LoggerAwareInterface
     }
 
     /**
-     * Returns actual base currency name
+     * Returns actual base currency name.
      *
      * @return string
      */
@@ -110,7 +109,7 @@ class CurrencyRatesService implements LoggerAwareInterface
     }
 
     /**
-     * Reloads rates using given driver
+     * Reloads rates using given driver.
      */
     public function reloadRates()
     {

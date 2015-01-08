@@ -16,13 +16,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use ONGR\CurrencyExchangeBundle\Twig\PriceExtension;
 
 /**
- * Class PriceExtensionTest
+ * Class PriceExtensionTest.
+ *
  * @package ONGR\CurrencyExchangeBundle\Tests\Unit\Twig
  */
 class PriceExtensionTest extends WebTestCase
 {
-    /*
-     * Test getPriceList()
+    /**
+     * Test getPriceList().
      */
     public function testGetPriceList()
     {
@@ -36,7 +37,7 @@ class PriceExtensionTest extends WebTestCase
 
         $result = $extension->getPriceList($twig, 1000);
 
-        $expected = '<span class="currency currency-eur">1.000 EUR</span>'.
+        $expected = '<span class="currency currency-eur">1.000 EUR</span>' .
             '<span class="currency currency-ltl">3.454,60 LTL</span>';
 
         $this->assertEquals(trim($expected), trim($result));

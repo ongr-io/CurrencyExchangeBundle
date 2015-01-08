@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var array currency rates when base is EUR
+     * @var array Currency rates when base is EUR.
      */
     private $currencyRates = [
         'DOP' => '58.3638',
@@ -39,8 +39,9 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @param array $rates
+     * @param array  $rates
      * @param string $base
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService
      */
     protected function getRatesService($rates, $base)
@@ -55,7 +56,8 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Rate undefined
+     * Rate undefined.
+     *
      * @expectedException \ONGR\CurrencyExchangeBundle\Exception\UndefinedCurrencyException
      */
     public function testUndefinedRate()
@@ -66,7 +68,7 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if service returns rates as expected
+     * Test if service returns rates as expected.
      */
     public function testGetRates()
     {
@@ -75,6 +77,8 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider for currency conversion test.
+     *
      * @return array
      */
     public function dataProviderToTestCurrencyConversion()
@@ -92,18 +96,21 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dataProviderToTestCurrencyConversion
-     * @param float $amountToConvert
+     * Currency conversion test.
+     *
+     * @param float  $amountToConvert
      * @param string $from
      * @param string $to
-     * @param float $expect
+     * @param float  $expect
+     *
+     * @dataProvider dataProviderToTestCurrencyConversion
      */
     public function testCurrencyConversation($amountToConvert, $from, $to, $expect)
     {
         $rates = [
             'LTL' => 2,
             'USD' => 1,
-            'EUR' => 0.5
+            'EUR' => 0.5,
         ];
         $service = new CurrencyExchangeService($this->getRatesService($rates, 'USD'), 'EUR');
         $this->assertEquals($expect, $service->calculateRate($amountToConvert, $to, $from));

@@ -12,20 +12,19 @@
 namespace ONGR\CurrencyExchangeBundle\Currency;
 
 /**
- * this interface defines structure for currency rates download driver
+ * This interface defines structure for currency rates download driver.
  */
-interface DriversGetterInterface
+interface CurrencyDriverInterface
 {
     /**
-     * Returns array of currency rates. For example:
-     * <code>['USD' => 1, 'EUR' => '1.678']</code>
+     * Returns array of currency rates. For example: <code>['USD' => 1, 'EUR' => '1.678']</code>.
      *
      * @return array
      */
     public function getRates();
 
     /**
-     * Returns default currency name
+     * Returns default currency name.
      *
      * @return string
      */

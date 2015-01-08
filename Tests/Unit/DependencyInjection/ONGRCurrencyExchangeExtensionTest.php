@@ -38,48 +38,49 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
                     'live_load' => false,
                     'driver' => [
                         'open_exchange_rates' => [
-                            'app_id' => '123456'
-                        ]
-                    ]
-                ]
-            ]
+                            'app_id' => '123456',
+                        ],
+                    ],
+                ],
+            ],
         ];
         $config2 = [
             'currency' => [
                 'exchange' => [
                     'cache' => 'stash.memcache',
                     'driver' => [
-                        'custom' => 'my_service'
-                    ]
-                ]
+                        'custom' => 'my_service',
+                    ],
+                ],
             ],
         ];
 
-        // case #0 we need currency rates service
+        // Case #0 we need currency rates service.
         $out[] = [$config1, $container1, 'ongr_currency_exchange.currency_rates_service'];
 
-        // case #1 we need currency exchange service
+        // Case #1 we need currency exchange service.
         $out[] = [$config1, $container1, 'ongr_currency_exchange.currency_exchange_service'];
 
-        // case #2 we need open exchange rates driver
+        // Case #2 we need open exchange rates driver.
         $out[] = [$config1, $container1, 'ongr_currency_exchange.open_exchange_rates_driver'];
 
-        // case #3 we need currency rates service for custom driver
+        // Case #3 we need currency rates service for custom driver.
         $out[] = [$config2, $container1, 'ongr_currency_exchange.currency_rates_service'];
 
-        // case #4 we need currency exchange service for custom driver
+        // Case #4 we need currency exchange service for custom driver.
         $out[] = [$config2, $container1, 'ongr_currency_exchange.currency_exchange_service'];
 
         return $out;
     }
 
     /**
-     * Test if we are able to load currency services
-     * @dataProvider getTestLoadCurrencyData
+     * Test if we are able to load currency services.
      *
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
-     * @param string $expectedId
+     * @param string           $expectedId
+     *
+     * @dataProvider getTestLoadCurrencyData
      */
     public function testLoadCurrency($config, $container, $expectedId)
     {
@@ -90,7 +91,7 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if default currency works
+     * Test if default currency works.
      */
     public function testDefaultCurrency()
     {

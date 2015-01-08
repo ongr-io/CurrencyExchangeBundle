@@ -46,7 +46,7 @@ ongr_currency_exchange:
 services:
 
     custom_exchange_driver_service:
-        class: ONGR\CurrencyExchangeBundle\Tests\Fixtures\Currency\CurrencyGetterService
+        class: ONGR\CurrencyExchangeBundle\Tests\fixture\Currency\CurrencyDriverService
 
     foo_settings_provider:
         class: ONGR\CurrencyExchangeBundle\Tests\FooSettingsProvider

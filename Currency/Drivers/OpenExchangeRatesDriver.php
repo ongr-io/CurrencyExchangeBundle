@@ -11,13 +11,13 @@
 
 namespace ONGR\CurrencyExchangeBundle\Currency\CurrencyExchange;
 
-use ONGR\CurrencyExchangeBundle\Currency\DriversGetterInterface;
+use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 use GuzzleHttp\Client;
 
 /**
- * This class downloads exchange rates from openexchangerates.org
+ * This class downloads exchange rates from openexchangerates.org.
  */
-class OpenExchangeRatesDriver implements DriversGetterInterface
+class OpenExchangeRatesDriver implements CurrencyDriverInterface
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class OpenExchangeRatesDriver implements DriversGetterInterface
     private $httpClient;
 
     /**
-     * @param string $appId
+     * @param string      $appId
      * @param null|Client $httpClient
      */
     public function __construct($appId, Client $httpClient = null)
@@ -40,7 +40,7 @@ class OpenExchangeRatesDriver implements DriversGetterInterface
     }
 
     /**
-     * Downloads raw currency data
+     * Downloads raw currency data.
      *
      * @return array
      */
@@ -61,18 +61,20 @@ class OpenExchangeRatesDriver implements DriversGetterInterface
     {
         $response = $this->getRawData();
 
-        // validate response
+        // Validate response.
         $valid = isset($response) && is_array($response) && isset($response['base']) && isset($response['rates']);
         if (!$valid) {
             throw new \UnexpectedValueException('Got invalid response');
         }
 
-        // check if base currency is correct
+        // Check if base currency is correct.
         if ($response['base'] != $this->getDefaultCurrencyName()) {
-            throw new \UnexpectedValueException(sprintf(
-                'We expected to get values in base currency USD. Got %s',
-                $response['base']
-            ));
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'We expected to get values in base currency USD. Got %s',
+                    $response['base']
+                )
+            );
         }
 
         return $response['rates'];

@@ -14,7 +14,7 @@ namespace ONGR\CurrencyExchangeBundle\Tests\Unit\Service;
 use ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService;
 
 /**
- * This class holds unit tests for currency rates service
+ * This class holds unit tests for currency rates service.
  */
 class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,17 +44,18 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         'UYU' => '29.6077',
         'UZS' => '2988.6321',
         'VEF' => '8.6630',
-        'VND' => '29105.6858'
+        'VND' => '29105.6858',
     ];
 
     /**
-     * @param string $base Base currency name
-     * @param null|array $rates Currency rates
-     * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Currency\DriversGetterInterface
+     * @param string     $base  Base currency name.
+     * @param null|array $rates Currency rates.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface
      */
     protected function getLoaderService($base, $rates = null)
     {
-        $mock = $this->getMock('ONGR\CurrencyExchangeBundle\Currency\DriversGetterInterface');
+        $mock = $this->getMock('ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface');
 
         if ($rates) {
             $mock->expects($this->any())->method('getRates')->will($this->returnValue($rates));
@@ -67,6 +68,7 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $value
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Stash\Interfaces\ItemInterface
      */
     protected function getCacheItem($value)
@@ -91,7 +93,7 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if we return correct base currency
+     * Test if we return correct base currency.
      */
     public function testGetBaseCurrency()
     {
@@ -101,7 +103,7 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if we are able to retrieve rates from cache
+     * Test if we are able to retrieve rates from cache.
      */
     public function testGetRatesFromCache()
     {
@@ -117,12 +119,12 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->ratesFixture, $service->getRates());
 
-        // test local cache
+        // Test local cache.
         $this->assertEquals($this->ratesFixture, $service->getRates());
     }
 
     /**
-     * Test if we are able to retrieve rates from cache
+     * Test if we are able to retrieve rates from cache.
      */
     public function testGetRatesFromDriver()
     {
@@ -139,17 +141,17 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->ratesFixture, $service->getRates());
 
-        // test local cache
+        // Test local cache.
         $this->assertEquals($this->ratesFixture, $service->getRates());
     }
 
     /**
-     * exception when rates are not loaded
+     * Exception when rates are not loaded.
+     *
      * @expectedException \ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException
      */
     public function testException()
     {
-
         $pool = $this->getCachePool();
         $pool->expects($this->any())->method('getItem')->with('ongr_currency')->will(
             $this->returnValue($this->getCacheItem(null))
