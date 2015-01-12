@@ -14,17 +14,12 @@
         "symfony/symfony": "~2.6"
     },
     "require-dev": {
-        "guzzlehttp/guzzle": "4.*",
+        "guzzlehttp/guzzle": "~5.0",
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
         "squizlabs/php_codesniffer": "~1.5",
         "tedivm/stash-bundle": "0.3.*"
-    },
-    "suggest": {
-        "guzzlehttp/guzzle": "Required if OpenExchangeRatesDriver is being used",
-        "sensio/buzz-bundle": "Enables default currency exchange rates download driver",
-        "tedivm/stash-bundle": "Enables currency exchange services"
     },
     "autoload": {
         "psr-4": {"ONGR\\CurrencyExchangeBundle\\": ""}
