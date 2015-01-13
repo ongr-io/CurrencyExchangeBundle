@@ -8,14 +8,6 @@ parameters:
     ongr_currency_exchange.twig.price_extension.class: ONGR\CurrencyExchangeBundle\Twig\PriceExtension
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
     ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
-    ongr_currency_exchange.twig.price_extension.currency.dec_point_separator: ','
-    ongr_currency_exchange.twig.price_extension.currency.thousands_separator: '.'
-    ongr_currency_exchange.twig.price_extension.display_map:
-        "EUR": "%s €"
-        "USD": "$ %s"
-    ongr_currency_exchange.twig.price_extension.to_print_list:
-        - EUR
-        - USD
 
 services:
     ongr_currency_exchange.twig.price_extension:

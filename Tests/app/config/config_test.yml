@@ -37,7 +37,13 @@ stash:
 
 ongr_currency_exchange:
     currency:
+        separators:
+            decimal: ','
+            thousands: '.'
         default: EUR
+        currencies:
+            EUR: "%s €"
+            USD: "$ %s"
         exchange:
             cache: stash.files_cache
             driver:
