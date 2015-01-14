@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->arrayNode('separators')
+                        ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('decimal')
                                 ->defaultValue(',')
