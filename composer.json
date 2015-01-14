@@ -11,15 +11,15 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/symfony": "~2.6"
+        "symfony/symfony": "~2.6",
+        "tedivm/stash-bundle": "0.4.*",
+        "guzzlehttp/guzzle": "~5.0"
     },
     "require-dev": {
-        "guzzlehttp/guzzle": "~5.0",
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "~1.5",
-        "tedivm/stash-bundle": "0.3.*"
+        "squizlabs/php_codesniffer": "~1.5"
     },
     "autoload": {
         "psr-4": {"ONGR\\CurrencyExchangeBundle\\": ""}
