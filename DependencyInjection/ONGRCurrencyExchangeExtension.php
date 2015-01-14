@@ -31,34 +31,34 @@ class ONGRCurrencyExchangeExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('ongr_currency_exchange.default_currency', $config['currency']['default']);
+        $container->setParameter('ongr_currency_exchange.default_currency', $config['default']);
         $container->setParameter(
             'ongr_currency_exchange.twig.price_extension.to_print_list',
-            array_keys($config['currency']['currencies'])
+            array_keys($config['currencies'])
         );
 
-        if (isset($config['currency']['separators']['decimal'])) {
+        if (isset($config['separators']['decimal'])) {
             $container->setParameter(
                 'ongr_currency_exchange.twig.price_extension.currency.dec_point_separator',
-                $config['currency']['separators']['decimal']
+                $config['separators']['decimal']
             );
         }
-        if (isset($config['currency']['separators']['thousands'])) {
+        if (isset($config['separators']['thousands'])) {
             $container->setParameter(
                 'ongr_currency_exchange.twig.price_extension.currency.thousands_separator',
-                $config['currency']['separators']['thousands']
+                $config['separators']['thousands']
             );
         }
         $container->setParameter(
             'ongr_currency_exchange.twig.price_extension.display_map',
-            $config['currency']['currencies']
+            $config['currencies']
         );
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if (isset($config['currency']['exchange'])) {
-            $this->loadCurrencyServices($config['currency'], $container);
+        if (isset($config['exchange'])) {
+            $this->loadCurrencyServices($config, $container);
         }
     }
 

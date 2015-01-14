@@ -27,13 +27,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
         $processorConfig = $processor->processConfiguration(new Configuration(), [[]]);
         $expectedConfiguration = [
-            'currency' => [
-                'default' => 'EUR',
-                'currencies' => [],
-                'separators' => [
-                    'decimal' => ',',
-                    'thousands' => '.',
-                ],
+            'default' => 'EUR',
+            'currencies' => [],
+            'separators' => [
+                'decimal' => ',',
+                'thousands' => '.',
             ],
         ];
         $this->assertEquals($processorConfig, $expectedConfiguration);

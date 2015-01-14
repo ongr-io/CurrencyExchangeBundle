@@ -28,9 +28,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('ongr_currency_exchange');
 
         $rootNode->children()
-            ->arrayNode('currency')
-            ->addDefaultsIfNotSet()
-                ->children()
                     ->scalarNode('default')
                         ->defaultValue('EUR')
                         ->info('set default currency')
@@ -76,9 +73,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                    ->end()
-                ->end()
-            ->end();
+                    ->end();
 
         return $treeBuilder;
     }
