@@ -32,25 +32,21 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
         $container1->setDefinition('stash.memcache', new Definition());
         $container1->setDefinition('my_service', new Definition());
         $config1 = [
-            'currency' => [
-                'exchange' => [
-                    'cache' => 'stash.memcache',
-                    'live_load' => false,
-                    'driver' => [
-                        'open_exchange_rates' => [
-                            'app_id' => '123456',
-                        ],
+            'exchange' => [
+                'cache' => 'stash.memcache',
+                'live_load' => false,
+                'driver' => [
+                    'open_exchange_rates' => [
+                        'app_id' => '123456',
                     ],
                 ],
             ],
         ];
         $config2 = [
-            'currency' => [
-                'exchange' => [
-                    'cache' => 'stash.memcache',
-                    'driver' => [
-                        'custom' => 'my_service',
-                    ],
+            'exchange' => [
+                'cache' => 'stash.memcache',
+                'driver' => [
+                    'custom' => 'my_service',
                 ],
             ],
         ];

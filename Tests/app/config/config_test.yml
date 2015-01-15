@@ -36,18 +36,17 @@ stash:
                 memKeyLimit:            20
 
 ongr_currency_exchange:
-    currency:
-        separators:
-            decimal: ','
-            thousands: '.'
-        default: EUR
-        currencies:
-            EUR: "%s €"
-            USD: "$ %s"
-        exchange:
-            cache: stash.files_cache
-            driver:
-                custom: custom_exchange_driver_service
+    separators:
+        decimal: ','
+        thousands: '.'
+    default: EUR
+    currencies:
+        EUR: "%s €"
+        USD: "$ %s"
+    exchange:
+        cache: stash.files_cache
+        driver:
+            custom: custom_exchange_driver_service
 
 services:
 
