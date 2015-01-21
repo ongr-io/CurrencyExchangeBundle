@@ -3,6 +3,7 @@ parameters:
     ongr_currency_exchange.currency_rates_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService
     ongr_currency_exchange.currency_exchange_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService
     ongr_currency_exchange.open_exchange_rates_driver.class: ONGR\CurrencyExchangeBundle\Currency\Drivers\OpenExchangeRatesDriver
+    ongr_currency_exchange.european_central_bank_rates_driver.class: ONGR\CurrencyExchangeBundle\Currency\Drivers\EuropeanCentralBankRatesDriver
 
     # Currency display extension
     ongr_currency_exchange.twig.price_extension.class: ONGR\CurrencyExchangeBundle\Twig\PriceExtension
@@ -21,3 +22,5 @@ services:
           - %ongr_currency_exchange.twig.price_extension.currency.name%
           - %ongr_currency_exchange.twig.price_extension.display_map%
           - %ongr_currency_exchange.twig.price_extension.to_print_list%
+    european_central_bank_rates:
+            class: %ongr_currency_exchange.european_central_bank_rates_driver.class%
