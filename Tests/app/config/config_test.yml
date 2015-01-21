@@ -27,7 +27,7 @@ framework:
 stash:
     caches:
         files:
-            handlers: [ FileSystem ]
+            drivers: [ FileSystem ]
             FileSystem:
                 dirSplit:               2
                 path:                   %kernel.cache_dir%/stash
