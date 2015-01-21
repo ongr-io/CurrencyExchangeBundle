@@ -604,45 +604,6 @@ class PriceExtensionTest extends WebTestCase
     }
 
     /**
-     * Test getCurrencyListCss.
-     */
-    public function testCurrencyListCss()
-    {
-        $rates = [
-            'EUR' => '1',
-            'USD' => '1.3345',
-            'LTL' => '3.4546',
-        ];
-        $toPrintList = [
-            'EUR',
-            'LTL',
-            'USD',
-        ];
-        $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension('', '.', '', 'EUR', null, $toPrintList);
-        $extension->setCurrencyExchangeService($exchangeService);
-        $expectedParams = [
-            'currencies' => [
-                [
-                    'stringValue' => 'eur',
-                ],
-                [
-                    'stringValue' => 'ltl',
-                ],
-                [
-                    'stringValue' => 'usd',
-                ],
-            ],
-        ];
-        $env = $this->getMock('stdClass', ['render']);
-        $env->expects($this->once())->method('render')->with(
-            'testTemplate',
-            $expectedParams
-        );
-        $extension->getCurrencyListCss($env, 'testTemplate');
-    }
-
-    /**
      * Test behavior when there is no currency exchange service defined.
      */
     public function testNoCurrencyExchange()

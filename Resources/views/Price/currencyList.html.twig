@@ -1,5 +1,5 @@
 {% block currency %}
     {% for currency in currencies %}
-        <span class="currency">{{ currency }}</span>
+        <span class="currency">{{ currency.stringValue }}</span>
     {% endfor %}
 {% endblock %}

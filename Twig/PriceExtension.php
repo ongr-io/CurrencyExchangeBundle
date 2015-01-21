@@ -120,25 +120,18 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      */
     public function getFunctions()
     {
-        $functions[] = new \Twig_SimpleFunction(
-            'ongr_price_currency_list',
-            [$this, 'getCurrencyList'],
-            [
-                'needs_environment' => true,
-                'is_safe' => ['html'],
-            ]
-        );
-
-        $functions[] = new \Twig_SimpleFunction(
-            'ongr_price_currency_list_css',
-            [$this, 'getCurrencyListCss'],
-            [
-                'needs_environment' => true,
-                'is_safe' => ['html'],
-            ]
-        );
-
-        return $functions;
+        return [
+            new \Twig_SimpleFunction(
+                'ongr_price_currency_list',
+                [$this, 'getCurrencyList'],
+                [
+                    'needs_environment' => true,
+                    'is_safe' => [
+                        'html',
+                    ],
+                ]
+            ),
+        ];
     }
 
     /**
@@ -246,31 +239,6 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
                 'stringValue' => $targetCurrency,
                 'tla' => strtolower($targetCurrency),
                 'default' => (strcasecmp($targetCurrency, $this->currency) == 0) ? true : false,
-            ];
-        }
-
-        return $environment->render(
-            $template,
-            ['currencies' => $values]
-        );
-    }
-
-    /**
-     * Returns css for hiding and displaying currencies.
-     *
-     * @param \Twig_Environment $environment
-     * @param string            $template
-     *
-     * @return string
-     */
-    public function getCurrencyListCss(
-        $environment,
-        $template = 'ONGRCurrencyExchangeBundle:Price:currencyListCss.html.twig'
-    ) {
-        $values = [];
-        foreach ($this->toListMap as $targetCurrency) {
-            $values[] = [
-                'stringValue' => strtolower($targetCurrency),
             ];
         }
 
