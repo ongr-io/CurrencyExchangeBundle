@@ -5,7 +5,7 @@ Currency Exchange Bundle
 Introduction
 ~~~~~~~~~~~~
 
-Currency exchange bundle.
+This bundle is used to display currency in twig templates and basic conversion.
 
 Documentation
 ~~~~~~~~~~~~~
