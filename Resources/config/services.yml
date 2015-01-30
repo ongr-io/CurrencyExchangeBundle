@@ -22,5 +22,5 @@ services:
           - %ongr_currency_exchange.twig.price_extension.currency.name%
           - %ongr_currency_exchange.twig.price_extension.display_map%
           - %ongr_currency_exchange.twig.price_extension.to_print_list%
-    european_central_bank_rates:
+    ongr_currency_exchange.european_central_bank_rates_driver:
             class: %ongr_currency_exchange.european_central_bank_rates_driver.class%
