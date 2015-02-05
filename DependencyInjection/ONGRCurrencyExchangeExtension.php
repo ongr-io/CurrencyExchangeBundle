@@ -14,6 +14,7 @@ namespace ONGR\CurrencyExchangeBundle\DependencyInjection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
@@ -31,7 +32,57 @@ class ONGRCurrencyExchangeExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('ongr_currency_exchange.default_currency', $config['default']);
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('services.yml');
+
+        $this->configCurrencyRatesService($config, $container);
+        $this->configTwigExtension($config, $container);
+        $this->configCurrencyExchangeService($container);
+    }
+
+    /**
+     * Defines currency rates service.
+     *
+     * @param array            $config
+     * @param ContainerBuilder $container
+     *
+     * @throws ServiceNotFoundException
+     */
+    private function configCurrencyRatesService(array $config, ContainerBuilder $container)
+    {
+        $driver = $config['driver']['service'];
+        $setters = $config['driver']['setters'];
+        if ($container->hasDefinition($driver)) {
+            if (!empty($setters)) {
+                foreach ($setters as $name => $value) {
+                    $container->findDefinition($driver)->addMethodCall($name, array_values($value));
+                }
+            }
+            $def = new Definition(
+                $container->getParameter('ongr_currency_exchange.currency_rates_service.class'),
+                [
+                    new Reference($driver),
+                    new Reference(sprintf('es.manager.%s', $config['es_manager'])),
+                    new Reference($config['cache']),
+                ]
+            );
+            $def->addMethodCall('setLogger', [new Reference('logger')]);
+            $def->addTag('monolog.logger', ['channel' => 'ongr_currency']);
+            $container->setDefinition('ongr_currency_exchange.currency_rates_service', $def);
+        } else {
+            throw new ServiceNotFoundException($driver);
+        }
+    }
+
+    /**
+     * Twig extension service.
+     *
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function configTwigExtension(array $config, ContainerBuilder $container)
+    {
+        $container->setParameter('ongr_currency_exchange.default_currency', $config['default_currency']);
         $container->setParameter(
             'ongr_currency_exchange.twig.price_extension.to_print_list',
             array_keys($config['currencies'])
@@ -53,56 +104,15 @@ class ONGRCurrencyExchangeExtension extends Extension
             'ongr_currency_exchange.twig.price_extension.display_map',
             $config['currencies']
         );
-
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
-
-        if (isset($config['exchange'])) {
-            $this->loadCurrencyServices($config, $container);
-        }
     }
 
     /**
-     * Build currency services.
+     * Defines currency exchange service.
      *
-     * @param array            $config
      * @param ContainerBuilder $container
      */
-    protected function loadCurrencyServices($config, ContainerBuilder $container)
+    private function configCurrencyExchangeService(ContainerBuilder $container)
     {
-        $driver = null;
-
-        if (isset($config['exchange']['driver']['custom'])) {
-            $driver = $config['exchange']['driver']['custom'];
-        } elseif (isset($config['exchange']['driver']['open_exchange_rates'])) {
-            $driver = 'ongr_currency_exchange.open_exchange_rates_driver';
-            $def = new Definition(
-                $container->getParameter('ongr_currency_exchange.open_exchange_rates_driver.class'),
-                [$config['exchange']['driver']['open_exchange_rates']['app_id']]
-            );
-            $container->setDefinition($driver, $def);
-        }
-
-        // Currency rates service.
-        $def = new Definition(
-            $container->getParameter('ongr_currency_exchange.currency_rates_service.class'),
-            [
-                new Reference($driver),
-                new Reference($config['exchange']['cache']),
-                $config['exchange']['live_load'],
-            ]
-        );
-        $def->addMethodCall('setLogger', [new Reference('logger')]);
-        $def->addTag('monolog.logger', ['channel' => 'ongr_currency']);
-        $container->setDefinition('ongr_currency_exchange.currency_rates_service', $def);
-
-        // Currency exchange service.
-        $def = new Definition(
-            $container->getParameter('ongr_currency_exchange.currency_exchange_service.class'),
-            [new Reference('ongr_currency_exchange.currency_rates_service'), $config['default']]
-        );
-        $container->setDefinition('ongr_currency_exchange.currency_exchange_service', $def);
-
         // Apply exchange service to price extension.
         $def = $container->getDefinition('ongr_currency_exchange.twig.price_extension');
         $def->addMethodCall('setLogger', [new Reference('logger')]);

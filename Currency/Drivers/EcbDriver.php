@@ -16,7 +16,7 @@ use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 /**
  * This class downloads exchange rates from http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml.
  */
-class EuropeanCentralBankRatesDriver implements CurrencyDriverInterface
+class EcbDriver implements CurrencyDriverInterface
 {
     /**
      * {@inheritdoc}

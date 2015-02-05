@@ -44,7 +44,7 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService
      */
-    protected function getRatesService($rates, $base)
+    private function getRatesService($rates, $base)
     {
         $mock = $this->getMockBuilder('ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService')
             ->disableOriginalConstructor()->getMock();

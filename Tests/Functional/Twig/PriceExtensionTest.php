@@ -37,8 +37,8 @@ class PriceExtensionTest extends WebTestCase
 
         $result = $extension->getPriceList($twig, 1000);
 
-        $expected = '<span class="currency currency-eur">1.000 EUR</span>' .
-            '<span class="currency currency-ltl">3.454,60 LTL</span>';
+        $expected = '<span class="currency currency-eur">1.000,00 EUR</span>' .
+            '<span class="currency currency-ltl">3.389,34 LTL</span>';
 
         $this->assertEquals(trim($expected), trim($result));
     }

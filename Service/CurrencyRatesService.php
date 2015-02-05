@@ -11,10 +11,17 @@
 
 namespace ONGR\CurrencyExchangeBundle\Service;
 
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
+use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
+use ONGR\CurrencyExchangeBundle\Document\RatesObject;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
+use ONGR\ElasticsearchBundle\DSL\Query\MatchAllQuery;
+use ONGR\ElasticsearchBundle\DSL\Sort\Sort;
+use ONGR\ElasticsearchBundle\ORM\Manager;
+use ONGR\ElasticsearchBundle\ORM\Repository;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 use Stash\Interfaces\ItemInterface;
 use Stash\Interfaces\PoolInterface;
 
@@ -23,49 +30,41 @@ use Stash\Interfaces\PoolInterface;
  */
 class CurrencyRatesService implements LoggerAwareInterface
 {
-    /**
-     * @var CurrencyDriverInterface
-     */
-    protected $driver;
-
-    /**
-     * @var PoolInterface
-     */
-    protected $pool;
-
-    /**
-     * @var bool
-     */
-    protected $poorManLoad = true;
+    use LoggerAwareTrait;
 
     /**
      * @var null|array
      */
-    protected $rates = null;
+    public $rates = null;
 
     /**
-     * @var LoggerInterface
+     * @var CurrencyDriverInterface
      */
-    protected $logger;
+    private $driver;
 
     /**
-     * @param CurrencyDriverInterface $driver      Currency exchange driver.
-     * @param PoolInterface           $pool        Cache pool.
-     * @param bool                    $poorManLoad Set to true if we want to load currencies on request.
+     * @var PoolInterface
      */
-    public function __construct(CurrencyDriverInterface $driver, PoolInterface $pool, $poorManLoad = true)
-    {
+    private $pool;
+
+    /**
+     * @var Manager
+     */
+    private $manager;
+
+    /**
+     * @param CurrencyDriverInterface $driver  Currency exchange driver.
+     * @param Manager                 $manager ES Manager.
+     * @param PoolInterface           $pool    Cache pool.
+     */
+    public function __construct(
+        CurrencyDriverInterface $driver,
+        Manager $manager,
+        PoolInterface $pool
+    ) {
         $this->driver = $driver;
+        $this->manager = $manager;
         $this->pool = $pool;
-        $this->poorManLoad = $poorManLoad;
-    }
-
-    /**
-     * @return ItemInterface
-     */
-    protected function getCachePoolItem()
-    {
-        return $this->pool->getItem('ongr_currency');
     }
 
     /**
@@ -80,22 +79,109 @@ class CurrencyRatesService implements LoggerAwareInterface
             return $this->rates;
         }
 
-        /** @var ItemInterface $item */
-        $item = $this->getCachePoolItem();
-
+        $item = $this->getCachedRates();
         $this->rates = $item->get();
         if (isset($this->rates)) {
             return $this->rates;
         }
 
-        if ($this->poorManLoad) {
-            $this->logger && $this->logger->notice('Auto reloaded currency rates on CurrencyRatesService');
-            $this->reloadRates();
+        $this->rates = $this->getRatesFromBackup();
+        if (isset($this->rates)) {
+            return $this->rates;
+        }
+
+        $this->rates = $this->reloadRates();
+        if (isset($this->rates)) {
+            return $this->rates;
         } else {
             throw new RatesNotLoadedException('Currency rates are not loaded and could not be loaded on demand');
         }
+    }
 
-        return $this->rates;
+    /**
+     * Returns currency rates from ES.
+     *
+     * @return array
+     */
+    private function getRatesFromBackup()
+    {
+        $rates = [];
+        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
+        $search = $repository->createSearch();
+        $sort = new Sort('created_at', Sort::ORDER_DESC);
+        $search->addSort($sort);
+        $query = new MatchAllQuery();
+        $search->addQuery($query);
+        $search->setSize(1);
+        try {
+            $results = $repository->execute($search, Repository::RESULTS_ARRAY);
+        } catch (Missing404Exception $e) {
+            $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
+
+            return null;
+        }
+
+        if (count($results)) {
+            foreach ($results[0]['rates'] as $data) {
+                $rates[$data['name']] = $data['value'];
+            }
+            $this->logger && $this->logger->notice('Rates returned from ES. Cache updated.');
+            $this->updateRatesCache($rates);
+
+            return $rates;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Update rates in cache.
+     *
+     * @param array $rates
+     */
+    private function updateRatesCache($rates)
+    {
+        $this->getCachedRates()->set($rates);
+    }
+
+    /**
+     * @return ItemInterface
+     */
+    private function getCachedRates()
+    {
+        return $this->pool->getItem('ongr_currency');
+    }
+
+    /**
+     * Reloads rates using given driver.
+     *
+     * @return array
+     */
+    public function reloadRates()
+    {
+        $esRates = [];
+        $this->rates = $this->driver->getRates();
+        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
+        /** @var CurrencyDocument $document */
+        $document = $repository->createDocument();
+        $document->setCreatedAt(new \DateTime());
+
+        if ($this->rates) {
+            foreach ($this->rates as $name => $value) {
+                $ratesObject = new RatesObject();
+                $ratesObject->setName($name);
+                $ratesObject->setValue($value);
+                $esRates[] = $ratesObject;
+            }
+            $document->rates = $esRates;
+            $this->manager->persist($document);
+            $this->manager->commit();
+            $this->updateRatesCache($this->rates);
+
+            return $this->rates;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -106,22 +192,5 @@ class CurrencyRatesService implements LoggerAwareInterface
     public function getBaseCurrency()
     {
         return $this->driver->getDefaultCurrencyName();
-    }
-
-    /**
-     * Reloads rates using given driver.
-     */
-    public function reloadRates()
-    {
-        $this->rates = $this->driver->getRates();
-        $this->getCachePoolItem()->set($this->rates);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 }

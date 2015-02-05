@@ -25,14 +25,13 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testConfiguration()
     {
         $processor = new Processor();
-        $processorConfig = $processor->processConfiguration(new Configuration(), [[]]);
+        $processorConfig = $processor->processConfiguration(new Configuration(), [['cache' => 'stash.files_cache']]);
         $expectedConfiguration = [
-            'default' => 'EUR',
+            'cache' => 'stash.files_cache',
+            'es_manager' => 'default',
+            'default_currency' => 'EUR',
             'currencies' => [],
-            'separators' => [
-                'decimal' => ',',
-                'thousands' => '.',
-            ],
+            'separators' => ['decimal' => ',', 'thousands' => '.'],
         ];
         $this->assertEquals($processorConfig, $expectedConfiguration);
     }
