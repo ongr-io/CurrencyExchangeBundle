@@ -27,21 +27,21 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $out = [];
 
-        $container1 = new ContainerBuilder();
-        $container1->setDefinition('ongr_currency_exchange.twig.price_extension', new Definition());
-        $container1->setDefinition('stash.memcache', new Definition());
-        $container1->setDefinition('my_service', new Definition());
+        $container = new ContainerBuilder();
+        $container->setDefinition('ongr_currency_exchange.twig.price_extension', new Definition());
+        $container->setDefinition('stash.memcache', new Definition());
+        $container->setDefinition('my_service', new Definition());
 
         $config = [
             'cache' => 'stash.memcache',
             'driver' => ['service' => 'ongr_currency_exchange.open_exchange_driver'],
         ];
         // Case #0 we need currency rates service.
-        $out[] = [$config, $container1, 'ongr_currency_exchange.currency_rates_service'];
+        $out[] = [$config, $container, 'ongr_currency_exchange.currency_rates_service'];
         // Case #1 we need currency exchange service.
-        $out[] = [$config, $container1, 'ongr_currency_exchange.currency_exchange_service'];
+        $out[] = [$config, $container, 'ongr_currency_exchange.currency_exchange_service'];
         // Case #2 we need open exchange rates driver.
-        $out[] = [$config, $container1, 'ongr_currency_exchange.open_exchange_driver'];
+        $out[] = [$config, $container, 'ongr_currency_exchange.open_exchange_driver'];
 
         return $out;
     }

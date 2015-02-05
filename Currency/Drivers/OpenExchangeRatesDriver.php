@@ -25,8 +25,13 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     private $appId;
 
     /**
+     * @var null|Client
+     */
+    private $httpClient;
+    /**
      * @return string
      */
+
     public function getAppId()
     {
         return $this->appId;
@@ -39,11 +44,6 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     {
         $this->appId = $appId;
     }
-
-    /**
-     * @var null|Client
-     */
-    private $httpClient;
 
     /**
      * @param null|Client $httpClient

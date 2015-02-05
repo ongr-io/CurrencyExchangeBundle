@@ -11,6 +11,7 @@
 
 namespace ONGR\CurrencyExchangeBundle\Command;
 
+use GuzzleHttp\Exception\ConnectException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,8 +40,13 @@ class UpdateEsCommand extends ContainerAwareCommand
             $data = $this->getContainer()->get('ongr_currency_exchange.currency_rates_service');
             $data->reloadRates();
             $output->writeln(sprintf('<info>Currency rates updated</info>'));
-        } catch (\Exception $e) {
-            $output->writeln(sprintf('<error>Error ocurred during update, check the logs!</error>'));
+        } catch (ConnectException $e) {
+            $output->writeln(
+                sprintf(
+                    '<error>Error ocurred during update. </error> <comment>`%s`</comment>',
+                    $e->getMessage()
+                )
+            );
         }
     }
 }

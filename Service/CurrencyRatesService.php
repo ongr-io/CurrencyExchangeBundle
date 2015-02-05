@@ -180,6 +180,8 @@ class CurrencyRatesService implements LoggerAwareInterface
 
             return $this->rates;
         } else {
+            $this->logger && $this->logger->notice('Failed to retrieve currency rates from provider.');
+
             return null;
         }
     }
