@@ -21,12 +21,12 @@ class CurrencyExchangeService
     /**
      * @var CurrencyRatesService
      */
-    protected $rates = null;
+    private $rates = null;
 
     /**
      * @var string
      */
-    protected $defaultCurrency;
+    private $defaultCurrency;
 
     /**
      * @param CurrencyRatesService $rates

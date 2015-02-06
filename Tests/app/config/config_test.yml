@@ -24,6 +24,21 @@ framework:
     session:         ~
     test: ~
 
+ongr_elasticsearch:
+    connections:
+        default:
+            hosts:
+                - { host: 127.0.0.1:9200 }
+            index_name: ongr
+            settings:
+                refresh_interval: -1
+                number_of_replicas: 1
+    managers:
+        default:
+            connection: default
+            mappings:
+                - ONGRCurrencyExchangeBundle
+
 stash:
     caches:
         files:
@@ -36,17 +51,19 @@ stash:
                 memKeyLimit:            20
 
 ongr_currency_exchange:
+    es_manager: default
+    default_currency: EUR
+    cache: stash.files_cache
     separators:
         decimal: ','
         thousands: '.'
-    default: EUR
     currencies:
         EUR: "%s €"
         USD: "$ %s"
-    exchange:
-        cache: stash.files_cache
-        driver:
-            custom: custom_exchange_driver_service
+    driver:
+        service: ongr_currency_exchange.open_exchange_driver
+        setters:
+            setAppId: ['8b447edc6e0e4661b584772ab6aa7611']
 
 services:
 

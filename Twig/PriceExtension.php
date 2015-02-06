@@ -29,42 +29,42 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     /**
      * @var string Currency sign.
      */
-    protected $currencySign;
+    private $currencySign;
 
     /**
      * @var string Decimal point separator.
      */
-    protected $decPointSeparator;
+    private $decPointSeparator;
 
     /**
      * @var string Thousands separator.
      */
-    protected $thousandsSeparator;
+    private $thousandsSeparator;
 
     /**
      * @var null Currency.
      */
-    protected $currency = null;
+    private $currency = null;
 
     /**
      * @var CurrencyExchangeService Service which provide currency exchange rates.
      */
-    protected $currencyService = null;
+    private $currencyService = null;
 
     /**
      * @var array Contains formats for each currency.
      */
-    protected $formatsMap;
+    private $formatsMap;
 
     /**
      * @var array Array of currencies to be listed in twig while using the "list" functions.
      */
-    protected $toListMap;
+    private $toListMap;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger = null;
+    private $logger = null;
 
     /**
      * Constructor.

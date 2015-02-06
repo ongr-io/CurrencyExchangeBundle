@@ -30,12 +30,26 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     private $httpClient;
 
     /**
-     * @param string      $appId
-     * @param null|Client $httpClient
+     * @return string
      */
-    public function __construct($appId, Client $httpClient = null)
+    public function getAppId()
+    {
+        return $this->appId;
+    }
+
+    /**
+     * @param string $appId
+     */
+    public function setAppId($appId)
     {
         $this->appId = $appId;
+    }
+
+    /**
+     * @param null|Client $httpClient
+     */
+    public function __construct(Client $httpClient = null)
+    {
         $this->httpClient = $httpClient ? $httpClient : new Client();
     }
 
@@ -48,7 +62,7 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     {
         $request = $this->httpClient->get(
             'http://openexchangerates.org/api/latest.json',
-            ['query' => ['app_id' => $this->appId]]
+            ['query' => ['app_id' => $this->getAppId()]]
         );
 
         return $request->json();
