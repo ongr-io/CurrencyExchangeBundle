@@ -93,9 +93,8 @@ class CurrencyRatesService implements LoggerAwareInterface
         $this->rates = $this->reloadRates();
         if (isset($this->rates)) {
             return $this->rates;
-        } else {
-            throw new RatesNotLoadedException('Currency rates are not loaded and could not be loaded on demand');
         }
+        throw new RatesNotLoadedException('Currency rates are not loaded and could not be loaded on demand');
     }
 
     /**
@@ -129,9 +128,9 @@ class CurrencyRatesService implements LoggerAwareInterface
             $this->updateRatesCache($rates);
 
             return $rates;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -179,11 +178,10 @@ class CurrencyRatesService implements LoggerAwareInterface
             $this->updateRatesCache($this->rates);
 
             return $this->rates;
-        } else {
-            $this->logger && $this->logger->notice('Failed to retrieve currency rates from provider.');
-
-            return null;
         }
+        $this->logger && $this->logger->notice('Failed to retrieve currency rates from provider.');
+
+        return null;
     }
 
     /**

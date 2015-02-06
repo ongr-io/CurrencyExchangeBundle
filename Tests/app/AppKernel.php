@@ -29,7 +29,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
             new ONGR\CurrencyExchangeBundle\ONGRCurrencyExchangeBundle(),
-
         ];
     }
 

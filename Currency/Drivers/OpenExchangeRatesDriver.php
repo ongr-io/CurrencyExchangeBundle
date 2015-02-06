@@ -28,10 +28,10 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
      * @var null|Client
      */
     private $httpClient;
+
     /**
      * @return string
      */
-
     public function getAppId()
     {
         return $this->appId;

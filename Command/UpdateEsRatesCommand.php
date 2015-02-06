@@ -14,13 +14,12 @@ namespace ONGR\CurrencyExchangeBundle\Command;
 use GuzzleHttp\Exception\ConnectException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A command which store currency rates in ES.
  */
-class UpdateEsCommand extends ContainerAwareCommand
+class UpdateEsRatesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
