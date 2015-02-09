@@ -99,7 +99,7 @@ If you need to load conversions rates from another source you will have to creat
 To create your custom driver you will have to implement ``ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface`` which define two methods:
 
  - getRates() - Returns array of currency rates. For example: <code>['USD' => 1, 'EUR' => '1.678']</code>.
- - getDefaultCurrencyName() - Returns rate provider default currency name. For example: 'EUR'.
+ - getDefaultCurrencyName() - Returns the default currency name of rate provider . For example: 'EUR'.
 
   .. code-block:: php
 
@@ -135,3 +135,5 @@ Then define as a service.
       services:
          acme_test.currency_driver:
            class: %acme_test.currency_rates_driver.class%
+
+Update the ``config.yml`` and run run a command ``app/console ongr:currency:update`` to see if everything is ok.
