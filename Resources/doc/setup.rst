@@ -20,11 +20,12 @@ Then run a composer update:
     composer.phar update ongr/currency-exchange-bundle # to only update the bundle
 ..
 
-Step 1: Enable Currency Exchange bundle
+Step 2: Enable Currency Exchange bundle
 ---------------------------------------
 
 Register it in ``AppKernel.php``.
-Also you need to register the `TedivmStashBundle <https://github.com/tedious/TedivmStashBundle>`_ bundle.
+Also you need to register the `TedivmStashBundle <https://github.com/tedious/TedivmStashBundle>`_ bundle and
+`ONGR Elasticsearch Bundle <https://github.com/ongr-io/ElasticsearchBundle>`_
 
 .. code-block:: php
 
@@ -34,6 +35,7 @@ Also you need to register the `TedivmStashBundle <https://github.com/tedious/Ted
         {
             return [
                 // ...
+                new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
                 new ONGR\CurrencyExchangeBundle\ONGRCurrencyExchangeBundle(),
                 new Tedivm\StashBundle\TedivmStashBundle(),
             ];
@@ -46,9 +48,38 @@ Also you need to register the `TedivmStashBundle <https://github.com/tedious/Ted
 Step 3: Add configuration
 -------------------------
 
-This bundle use `TedivmStashBundle <https://github.com/tedious/TedivmStashBundle>`_ for saving currencies into the cache.
-To reload currency rates you need remove cache dir, or setup configuration to use an APC cache which has a TTL option.
-(See the `Stash documentation <http://stash.tedivm.com>`_ for more information on using the cache service.)
+This bundle use `TedivmStashBundle <https://github.com/tedious/TedivmStashBundle>`_ for saving currencies into the cache
+and `ONGR Elasticsearch Bundle <https://github.com/ongr- io/ElasticsearchBundle>`_ for currencies backup.
+To reload rates you need to set up a cron job and run a command `app/console ongr:currency:update` daily. It will save
+currency rates into the ES and update the cache.
+
+Elasticsearch basic configuration:
+
+.. code-block:: yaml
+
+    ongr_elasticsearch:
+        connections:
+            default:
+                hosts:
+                    - { host: 127.0.0.1:9200 }
+                index_name: acme
+                settings:
+                    refresh_interval: -1
+                    number_of_replicas: 1
+        managers:
+            default:
+                connection: default
+                mappings:
+                    - ONGRCurrencyExchangeBundle
+..
+
+Please note that you need to run these two commands:
+- ``app/console es:index:create`` - to create an index
+- ``app/console es:type:update`` - to create a type
+
+More information about Ongr Elasticsearch `bundle <http://ongr.readthedocs.org/en/latest/components/ElasticsearchBundle/>`_
+
+
 Stash basic configuration:
 
 .. code-block:: yaml
@@ -68,36 +99,38 @@ Stash basic configuration:
 
 Currency Exchange configuration:
 
-You will have to define your api id in the config.yml file of you environment.
-A free api id is available `here <https://openexchangerates.org/signup/free>`_.
-Please check the the list of available `currencies <https://openexchangerates.org/currencies>`_.
+This bundle comes with two currency rates drivers:
 
-You can add the currencies you need in ``config.yml`` file. Display map maps currency with its format. ``%s`` stands for the price itself.
+- ongr_currency_exchange.open_exchange_driver
+
+  You will have to define your api id in the config.yml file of you environment.
+  A free api id is available `here <https://openexchangerates.org/signup/free>`_.
+  Please check the the list of available `currencies <https://openexchangerates.org/currencies>`_.
+
+- ongr_currency_exchange.ecb_driver
+
+  `List of available currencies <https://www.ecb.europa.eu/stats/exchange/eurofxref/html/index.en.html>`_
+
+Add the currencies you need in ``config.yml`` file. Display maps currency with its format. ``%s``
+stands for the price itself.
 
 
 .. code-block:: yaml
 
     # app/config/config.yml
     ongr_currency_exchange:
-        default: EUR
+        es_manager: default
+        default_currency: EUR
+        cache: stash.files_cache
         separators:
             decimal: ','
             thousands: '.'
         currencies:
             EUR: "%s €"
             USD: "$ %s"
-            NOK: "NOK %s"
-        exchange:
-            cache: stash.files_cache
-            driver:
-                open_exchange_rates:
-                    app_id: 123456 #Your https://openexchangerates.org api key.
+        driver:
+            service: ongr_currency_exchange.open_exchange_driver
+            setters:
+                setAppId: ['8b447edc6e0e4661b584772ab6aa7611']
 ..
 
-There is a possibility to use The European Central Bank.
-
-.. code-block:: yaml
-
-    driver:
-        custom: ongr_currency_exchange.european_central_bank_rates_driver
-..
