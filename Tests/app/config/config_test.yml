@@ -24,6 +24,13 @@ framework:
     session:         ~
     test: ~
 
+monolog:
+    handlers:
+        main:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  debug
+
 ongr_elasticsearch:
     connections:
         default:
@@ -66,7 +73,6 @@ ongr_currency_exchange:
             setAppId: ['8b447edc6e0e4661b584772ab6aa7611']
 
 services:
-
     custom_exchange_driver_service:
         class: ONGR\CurrencyExchangeBundle\Tests\fixture\Currency\CurrencyDriverService
 
