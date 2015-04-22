@@ -11,7 +11,6 @@
 
 namespace ONGR\CurrencyExchangeBundle\Tests\Functional\Twig;
 
-use ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use ONGR\CurrencyExchangeBundle\Twig\PriceExtension;
 

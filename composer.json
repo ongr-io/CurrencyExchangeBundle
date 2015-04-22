@@ -20,8 +20,8 @@
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "~1.5",
-        "ongr/ongr-strict-standard": "~1.0.0"
+        "squizlabs/php_codesniffer": "~2.0",
+        "ongr/ongr-strict-standard": "~2.1"
     },
     "autoload": {
         "psr-4": {"ONGR\\CurrencyExchangeBundle\\": ""}
