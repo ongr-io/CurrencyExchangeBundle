@@ -275,7 +275,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     }
 
     /**
-     * @param var $currencyService
+     * @param $currencyService
      */
     public function setCurrencyExchangeService($currencyService)
     {
