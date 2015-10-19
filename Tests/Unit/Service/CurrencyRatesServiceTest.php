@@ -58,6 +58,11 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
+     * @var array
+     */
+    private $esRatesResult;
+
+    /**
      * Before a test method is run, a template method called setUp() is invoked.
      */
     public function setUp()
