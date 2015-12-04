@@ -15,7 +15,7 @@ before_script:
   - composer install
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
-  - vendor/bin/phpcs -p --standard=vendor/ongr/ongr-strict-standard/Ongr --ignore=vendor/,Tests/app/,Resources/public/ ./
+  - vendor/bin/phpcs -p --standard=PSR2 --ignore=vendor/,Tests/app/ ./
   - sphinx-build -nWq -b html -c . Resources/doc _build/html
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
