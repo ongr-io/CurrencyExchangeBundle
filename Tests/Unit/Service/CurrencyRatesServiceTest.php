@@ -13,8 +13,8 @@ namespace ONGR\CurrencyExchangeBundle\Tests\Unit\Service;
 
 use ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService;
 use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
-use ONGR\ElasticsearchBundle\ORM\Manager;
-use ONGR\ElasticsearchBundle\ORM\Repository;
+use ONGR\ElasticsearchBundle\Service\Manager;
+use ONGR\ElasticsearchBundle\Service\Repository;
 
 /**
  * This class holds unit tests for currency rates service.
@@ -75,11 +75,11 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        $searchMock = $this->getMock('ONGR\ElasticsearchBundle\DSL\Search');
+        $searchMock = $this->getMock('ONGR\ElasticsearchDSL\Search');
 
         $searchMock->expects($this->any())->method('addSort')->will($this->returnSelf());
 
-        $this->repositoryMock = $this->getMockBuilder('ONGR\ElasticsearchBundle\ORM\Repository')
+        $this->repositoryMock = $this->getMockBuilder('ONGR\ElasticsearchBundle\Service\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['createSearch', 'execute', 'createDocument'])
             ->getMock();
@@ -87,7 +87,7 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $this->repositoryMock->expects($this->any())->method('createSearch')->willReturn($searchMock);
         $this->repositoryMock->expects($this->any())->method('createDocument')->willReturn(new CurrencyDocument());
 
-        $this->esManagerMock = $this->getMockBuilder('ONGR\ElasticsearchBundle\ORM\Manager')
+        $this->esManagerMock = $this->getMockBuilder('ONGR\ElasticsearchBundle\Service\Manager')
             ->setMethods(['getRepository', 'persist', 'commit'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -16,10 +16,10 @@ use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
 use ONGR\CurrencyExchangeBundle\Document\RatesObject;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
-use ONGR\ElasticsearchBundle\DSL\Query\MatchAllQuery;
-use ONGR\ElasticsearchBundle\DSL\Sort\Sort;
-use ONGR\ElasticsearchBundle\ORM\Manager;
-use ONGR\ElasticsearchBundle\ORM\Repository;
+use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
+use ONGR\ElasticsearchBundle\Service\Manager;
+use ONGR\ElasticsearchBundle\Service\Repository;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Stash\Interfaces\ItemInterface;
@@ -107,8 +107,7 @@ class CurrencyRatesService implements LoggerAwareInterface
         $rates = [];
         $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
         $search = $repository->createSearch();
-        $sort = new Sort('created_at', Sort::ORDER_DESC);
-        $search->addSort($sort);
+        $search->addSort(new FieldSort('created_at', FieldSort::DESC));
         $query = new MatchAllQuery();
         $search->addQuery($query);
         $search->setSize(1);
@@ -160,9 +159,9 @@ class CurrencyRatesService implements LoggerAwareInterface
     {
         $esRates = [];
         $this->rates = $this->driver->getRates();
-        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
+
         /** @var CurrencyDocument $document */
-        $document = $repository->createDocument();
+        $document = new CurrencyDocument();
         $document->setCreatedAt(new \DateTime());
 
         if ($this->rates) {

@@ -11,17 +11,16 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/symfony": "~2.6",
+        "symfony/symfony": "~2.7",
         "tedivm/stash-bundle": "0.4.*",
         "guzzlehttp/guzzle": "~5.0",
-        "ongr/elasticsearch-bundle": "~0.6"
+        "ongr/elasticsearch-bundle": "dev-master"
     },
     "require-dev": {
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "~2.0",
-        "ongr/ongr-strict-standard": "~2.1"
+        "squizlabs/php_codesniffer": "~2.0"
     },
     "autoload": {
         "psr-4": {"ONGR\\CurrencyExchangeBundle\\": ""}

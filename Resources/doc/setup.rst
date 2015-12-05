@@ -61,10 +61,11 @@ Elasticsearch basic configuration:
         connections:
             default:
                 hosts:
-                    - { host: 127.0.0.1:9200 }
+                    - 127.0.0.1:9200
                 index_name: acme
                 settings:
-                    refresh_interval: -1
+                    index:
+                        refresh_interval: -1
                     number_of_replicas: 1
         managers:
             default:
@@ -74,8 +75,8 @@ Elasticsearch basic configuration:
 ..
 
 Please note that you need to run these two commands:
-- ``app/console es:index:create`` - to create an index
-- ``app/console es:type:update`` - to create a type
+- ``app/console ongr:es:index:create`` - to create an index
+- ``app/console ongr:es:mapping:update`` - to create a type
 
 More information about Ongr Elasticsearch `bundle <http://ongr.readthedocs.org/en/latest/components/ElasticsearchBundle/>`_
 

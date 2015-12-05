@@ -34,8 +34,8 @@ class PriceExtensionTest extends WebTestCase
         $extension->setToListMap($currencies);
         $extension->setFormatsMap(array_combine($currencies, ['%s EUR', '%s LTL']));
 
-        $result = $extension->getPriceList($twig, 1000);
-        $startPrefix = '<span class="currency currency-eur">1.000 EUR</span>';
+        $result = $extension->getPriceList($twig, 2500);
+        $startPrefix = '<span class="currency currency-eur">2.500 EUR</span>';
         $endPrefix = 'LTL</span>';
         $this->assertStringStartsWith($startPrefix, trim($result));
         $this->assertStringEndsWith($endPrefix, trim($result));
