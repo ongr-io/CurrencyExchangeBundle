@@ -376,14 +376,14 @@ class PriceExtensionTest extends WebTestCase
             'EUR' => '%s Euros',
         ];
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '8790 Svensk krona',
-                    'tla' => 'sek',
+                    'value' => '8790 Svensk krona',
+                    'currency' => 'sek',
                 ],
                 [
-                    'stringValue' => '1000 Euros',
-                    'tla' => 'eur',
+                    'value' => '1000 Euros',
+                    'currency' => 'eur',
                 ],
             ],
         ];
@@ -393,14 +393,14 @@ class PriceExtensionTest extends WebTestCase
             'SEK' => '%s Svensk krona',
         ];
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '8790 Svensk krona',
-                    'tla' => 'sek',
+                    'value' => '8790 Svensk krona',
+                    'currency' => 'sek',
                 ],
                 [
-                    'stringValue' => '1000 EUR',
-                    'tla' => 'eur',
+                    'value' => '1000 EUR',
+                    'currency' => 'eur',
                 ],
             ],
         ];
@@ -453,42 +453,42 @@ class PriceExtensionTest extends WebTestCase
         ];
         // Case #1 the default currency is used.
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '100 ',
-                    'tla' => 'eur',
+                    'value' => '100 ',
+                    'currency' => 'eur',
                 ],
                 [
-                    'stringValue' => '345.46 ',
-                    'tla' => 'ltl',
+                    'value' => '345.46 ',
+                    'currency' => 'ltl',
                 ],
             ],
         ];
         $out[] = [$rates, $toPrintList, 'EUR', 100, $expectedParams];
         // Case #2 currency not in the toPrintlist is used.
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '74.93 ',
-                    'tla' => 'eur',
+                    'value' => '74.93 ',
+                    'currency' => 'eur',
                 ],
                 [
-                    'stringValue' => '258.87 ',
-                    'tla' => 'ltl',
+                    'value' => '258.87 ',
+                    'currency' => 'ltl',
                 ],
             ],
         ];
         $out[] = [$rates, $toPrintList, 'USD', 100, $expectedParams];
         // Case #3 currency in the toPrintlist is used.
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '28.95 ',
-                    'tla' => 'eur',
+                    'value' => '28.95 ',
+                    'currency' => 'eur',
                 ],
                 [
-                    'stringValue' => '100 ',
-                    'tla' => 'ltl',
+                    'value' => '100 ',
+                    'currency' => 'ltl',
                 ],
             ],
         ];
@@ -539,14 +539,14 @@ class PriceExtensionTest extends WebTestCase
         $extension = new PriceExtension('', '.', '', 'EUR', null, $toPrintList);
         $extension->setCurrencyExchangeService($exchangeService);
         $expectedParams = [
-            'currencies' => [
+            'prices' => [
                 [
-                    'stringValue' => '1000 ',
-                    'tla' => 'eur',
+                    'value' => '1000 ',
+                    'currency' => 'eur',
                 ],
                 [
-                    'stringValue' => '3454.60 ',
-                    'tla' => 'ltl',
+                    'value' => '3454.60 ',
+                    'currency' => 'ltl',
                 ],
             ],
         ];
@@ -579,18 +579,18 @@ class PriceExtensionTest extends WebTestCase
         $expectedParams = [
             'currencies' => [
                 [
-                    'stringValue' => 'EUR',
-                    'tla' => 'eur',
+                    'value' => 'EUR',
+                    'code' => 'eur',
                     'default' => true,
                 ],
                 [
-                    'stringValue' => 'LTL',
-                    'tla' => 'ltl',
+                    'value' => 'LTL',
+                    'code' => 'ltl',
                     'default' => false,
                 ],
                 [
-                    'stringValue' => 'USD',
-                    'tla' => 'usd',
+                    'value' => 'USD',
+                    'code' => 'usd',
                     'default' => false,
                 ],
             ],

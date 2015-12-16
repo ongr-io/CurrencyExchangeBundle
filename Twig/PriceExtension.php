@@ -14,6 +14,7 @@ namespace ONGR\CurrencyExchangeBundle\Twig;
 use ONGR\CurrencyExchangeBundle\Exception\UndefinedCurrencyException;
 use ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,6 +22,8 @@ use Psr\Log\LoggerInterface;
  */
 class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * Extension name
      */
@@ -60,11 +63,6 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      * @var array Array of currencies to be listed in twig while using the "list" functions.
      */
     private $toListMap;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger = null;
 
     /**
      * Constructor.
@@ -122,7 +120,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     {
         return [
             new \Twig_SimpleFunction(
-                'ongr_price_currency_list',
+                'ongr_currency_list',
                 [$this, 'getCurrencyList'],
                 [
                     'needs_environment' => true,
@@ -206,20 +204,20 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     public function getPriceList(
         $environment,
         $price,
-        $template = 'ONGRCurrencyExchangeBundle:Price:priceList.html.twig',
+        $template = 'ONGRCurrencyExchangeBundle::price_list.html.twig',
         $fromCurrency = null
     ) {
         $values = [];
         foreach ($this->toListMap as $targetCurrency) {
             $values[] = [
-                'stringValue' => $this->getFormattedPrice($price, 0, $targetCurrency, $fromCurrency),
-                'tla' => strtolower($targetCurrency),
+                'value' => $this->getFormattedPrice($price, 0, $targetCurrency, $fromCurrency),
+                'currency' => strtolower($targetCurrency),
             ];
         }
 
         return $environment->render(
             $template,
-            ['currencies' => $values]
+            ['prices' => $values]
         );
     }
 
@@ -231,13 +229,13 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      *
      * @return string
      */
-    public function getCurrencyList($environment, $template = 'ONGRCurrencyExchangeBundle:Price:currencyList.html.twig')
+    public function getCurrencyList($environment, $template = 'ONGRCurrencyExchangeBundle::currency_list.html.twig')
     {
         $values = [];
         foreach ($this->toListMap as $targetCurrency) {
             $values[] = [
-                'stringValue' => $targetCurrency,
-                'tla' => strtolower($targetCurrency),
+                'value' => $targetCurrency,
+                'code' => strtolower($targetCurrency),
                 'default' => (strcasecmp($targetCurrency, $this->currency) == 0) ? true : false,
             ];
         }
@@ -280,14 +278,6 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     public function setCurrencyExchangeService($currencyService)
     {
         $this->currencyService = $currencyService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     /**

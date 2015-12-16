@@ -1,0 +1,7 @@
+{% block price %}
+    <ul class="price-list">
+        {% for price in prices %}
+            <li class="currency currency-{{ price.currency }}">{{ price.value }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
