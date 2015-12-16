@@ -1,5 +1,6 @@
 {
     "name": "ongr/currency-exchange-bundle",
+    "description": "ONGR currency exchange bundle",
     "type": "symfony-bundle",
     "homepage": "http://ongr.io",
     "license": "MIT",
@@ -10,11 +11,13 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "symfony/symfony": "~2.7",
+        "php": ">=5.5",
+        "symfony/symfony": "~2.7|~3.0",
         "tedivm/stash-bundle": "0.4.*",
         "guzzlehttp/guzzle": "~5.0",
         "ongr/elasticsearch-bundle": "dev-master"
+
+        ,"ongr/elasticsearch-dsl": "dev-master"
     },
     "require-dev": {
         "symfony/monolog-bundle": "~2.5",
@@ -23,6 +26,6 @@
         "squizlabs/php_codesniffer": "~2.0"
     },
     "autoload": {
-        "psr-4": {"ONGR\\CurrencyExchangeBundle\\": ""}
+        "psr-4": { "ONGR\\CurrencyExchangeBundle\\": "" }
     }
 }
