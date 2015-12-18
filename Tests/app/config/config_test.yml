@@ -67,10 +67,8 @@ ongr_currency_exchange:
     currencies:
         EUR: "%s €"
         USD: "$ %s"
-    driver:
-        service: ongr_currency_exchange.open_exchange_driver
-        setters:
-            setAppId: ['8b447edc6e0e4661b584772ab6aa7611']
+    driver: ongr_currency_exchange.open_exchange_driver
+    open_exchange_rates_api_id: '8b447edc6e0e4661b584772ab6aa7611'
 
 services:
     custom_exchange_driver_service:

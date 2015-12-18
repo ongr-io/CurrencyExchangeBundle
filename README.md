@@ -118,8 +118,6 @@ ongr_currency_exchange:
     currencies:
         EUR: "%s €"    # %s stands for the price itself
         USD: "$ %s"
-    driver:
-        service: ongr_currency_exchange.ecb_driver
 ```
 
 That's it for setup, jump to the next chapter to learn how to use this bundle.

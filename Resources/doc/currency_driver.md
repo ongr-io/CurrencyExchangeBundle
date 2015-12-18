@@ -78,8 +78,7 @@ Last, set new driver in config:
 # app/config/config.yml
 ongr_currency_exchange:
     # ...
-    driver:
-        service: app.currency_driver
+    driver: app.currency_driver
 ```
 
 Now you can test your custom driver by running currency update command:
