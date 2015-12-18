@@ -34,7 +34,7 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $config = [
             'cache' => 'stash.memcache',
-            'driver' => ['service' => 'ongr_currency_exchange.open_exchange_driver'],
+            'driver' => 'ongr_currency_exchange.ecb_driver',
         ];
         // Case #0 we need currency rates service.
         $out[] = [$config, $container, 'ongr_currency_exchange.currency_rates_service'];
@@ -71,7 +71,6 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
         $config = [
             'ongr_currency_exchange' => [
                 'cache' => 'stash.files_cache',
-                'driver' => [],
             ],
         ];
         $extension = new ONGRCurrencyExchangeExtension();
@@ -80,5 +79,24 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($container->hasParameter('ongr_currency_exchange.default_currency'));
         $this->assertEquals('EUR', $container->getParameter('ongr_currency_exchange.default_currency'));
+    }
+
+    /**
+     * Test if exception is thrown when Open Exchange Rates driver is configured without API ID.
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage "open_exchange_rates_api_id" must be set
+     */
+    public function testOpenExchangeRatesApiIdMissing()
+    {
+        $config = [
+            'ongr_currency_exchange' => [
+                'cache' => 'stash.files_cache',
+                'driver' => 'ongr_currency_exchange.open_exchange_driver',
+            ],
+        ];
+
+        $extension = new ONGRCurrencyExchangeExtension();
+        $extension->load($config, new ContainerBuilder());
     }
 }

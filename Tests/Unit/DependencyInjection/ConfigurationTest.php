@@ -32,7 +32,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'default_currency' => 'EUR',
             'currencies' => [],
             'separators' => ['decimal' => ',', 'thousands' => '.'],
+            'driver' => 'ongr_currency_exchange.ecb_driver',
+            'open_exchange_rates_api_id' => null,
         ];
-        $this->assertEquals($processorConfig, $expectedConfiguration);
+
+        $this->assertEquals($expectedConfiguration, $processorConfig);
     }
 }

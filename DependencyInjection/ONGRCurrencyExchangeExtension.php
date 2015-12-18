@@ -11,13 +11,14 @@
 
 namespace ONGR\CurrencyExchangeBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -50,14 +51,17 @@ class ONGRCurrencyExchangeExtension extends Extension
      */
     private function configCurrencyRatesService(array $config, ContainerBuilder $container)
     {
-        $driver = $config['driver']['service'];
-        $setters = $config['driver']['setters'];
+        $driver = $config['driver'];
+        $ecbApiId = $config['open_exchange_rates_api_id'];
+
+        if ($driver == 'ongr_currency_exchange.open_exchange_driver' && !$ecbApiId) {
+            throw new InvalidConfigurationException(
+                '"open_exchange_rates_api_id" must be set when using ' .
+                '"ongr_currency_exchange.open_exchange_driver" driver.'
+            );
+        }
+
         if ($container->hasDefinition($driver)) {
-            if (!empty($setters)) {
-                foreach ($setters as $name => $value) {
-                    $container->findDefinition($driver)->addMethodCall($name, array_values($value));
-                }
-            }
             $def = new Definition(
                 $container->getParameter('ongr_currency_exchange.currency_rates_service.class'),
                 [
