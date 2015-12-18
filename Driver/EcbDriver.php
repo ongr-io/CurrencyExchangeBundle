@@ -9,9 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\CurrencyExchangeBundle\Currency\Drivers;
-
-use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
+namespace ONGR\CurrencyExchangeBundle\Driver;
 
 /**
  * This class downloads exchange rates from http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml.
@@ -36,12 +34,11 @@ class EcbDriver implements CurrencyDriverInterface
     }
 
     /**
-     * Default base currency of The European Central Bank.
-     *
      * {@inheritdoc}
      */
-    public function getDefaultCurrencyName()
+    public function getBaseCurrency()
     {
+        // Default base currency of The European Central Bank
         return 'EUR';
     }
 }

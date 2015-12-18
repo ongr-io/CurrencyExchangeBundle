@@ -108,13 +108,13 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
      * @param string     $base  Base currency name.
      * @param null|array $rates Currency rates.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface
      */
     private function getDriverMock($base, $rates = null)
     {
-        $mock = $this->getMock('ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface');
+        $mock = $this->getMock('ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface');
         $mock->expects($this->any())->method('getRates')->will($this->returnValue($rates));
-        $mock->expects($this->any())->method('getDefaultCurrencyName')->will($this->returnValue($base));
+        $mock->expects($this->any())->method('getBaseCurrency')->will($this->returnValue($base));
 
         return $mock;
     }

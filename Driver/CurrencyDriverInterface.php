@@ -9,24 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\CurrencyExchangeBundle\Currency;
+namespace ONGR\CurrencyExchangeBundle\Driver;
 
 /**
- * This interface defines structure for currency rates download driver.
+ * This interface defines methods for currency driver.
+ *
+ * Currency driver is a service that provides currency rates from single source.
  */
 interface CurrencyDriverInterface
 {
     /**
-     * Returns array of currency rates. For example: <code>['USD' => 1, 'EUR' => '1.678']</code>.
+     * Returns array of currency rates.
+     *
+     * For example: <code>['USD' => 1, 'EUR' => '1.678']</code>.
      *
      * @return array
      */
     public function getRates();
 
     /**
-     * Returns default currency name.
+     * Returns base currency code.
      *
      * @return string
      */
-    public function getDefaultCurrencyName();
+    public function getBaseCurrency();
 }

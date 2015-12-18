@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\CurrencyExchangeBundle\Currency\Drivers;
+namespace ONGR\CurrencyExchangeBundle\Driver;
 
-use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 use GuzzleHttp\Client;
 
 /**
@@ -82,7 +81,7 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
         }
 
         // Check if base currency is correct.
-        if ($response['base'] != $this->getDefaultCurrencyName()) {
+        if ($response['base'] != $this->getBaseCurrency()) {
             throw new \UnexpectedValueException(
                 sprintf(
                     'We expected to get values in base currency USD. Got %s',
@@ -95,9 +94,9 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getDefaultCurrencyName()
+    public function getBaseCurrency()
     {
         return 'USD';
     }
