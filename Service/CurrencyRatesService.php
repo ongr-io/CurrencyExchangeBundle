@@ -12,9 +12,9 @@
 namespace ONGR\CurrencyExchangeBundle\Service;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
-use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
 use ONGR\CurrencyExchangeBundle\Document\RatesObject;
+use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
@@ -190,6 +190,6 @@ class CurrencyRatesService implements LoggerAwareInterface
      */
     public function getBaseCurrency()
     {
-        return $this->driver->getDefaultCurrencyName();
+        return $this->driver->getBaseCurrency();
     }
 }

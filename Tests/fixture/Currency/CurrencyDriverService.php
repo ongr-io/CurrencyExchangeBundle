@@ -11,7 +11,7 @@
 
 namespace ONGR\CurrencyExchangeBundle\Tests\fixture\Currency;
 
-use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
+use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 
 /**
  * This class provides fixture for currency getter.
@@ -33,7 +33,7 @@ class CurrencyDriverService implements CurrencyDriverInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefaultCurrencyName()
+    public function getBaseCurrency()
     {
         return 'EUR';
     }

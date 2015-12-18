@@ -39,7 +39,7 @@ See example below:
 
 namespace AppBundle\Service;
 
-use ONGR\CurrencyExchangeBundle\Currency\CurrencyDriverInterface;
+use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 
 class CurrencyDriver implements CurrencyDriverInterface
 {
@@ -52,7 +52,7 @@ class CurrencyDriver implements CurrencyDriverInterface
         ];
     }
     
-    public function getDefaultCurrencyName()
+    public function getBaseCurrency()
     {
         return 'EUR';
     }

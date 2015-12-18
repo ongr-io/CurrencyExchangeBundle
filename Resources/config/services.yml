@@ -2,8 +2,8 @@ parameters:
     # Currency rate
     ongr_currency_exchange.currency_rates_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService
     ongr_currency_exchange.currency_exchange_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService
-    ongr_currency_exchange.open_exchange_driver.class: ONGR\CurrencyExchangeBundle\Currency\Drivers\OpenExchangeRatesDriver
-    ongr_currency_exchange.ecb_driver.class: ONGR\CurrencyExchangeBundle\Currency\Drivers\EcbDriver
+    ongr_currency_exchange.open_exchange_driver.class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver
+    ongr_currency_exchange.ecb_driver.class: ONGR\CurrencyExchangeBundle\Driver\EcbDriver
 
     # Currency display extension
     ongr_currency_exchange.twig.price_extension.class: ONGR\CurrencyExchangeBundle\Twig\PriceExtension
