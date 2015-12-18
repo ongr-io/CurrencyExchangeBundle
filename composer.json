@@ -16,14 +16,13 @@
         "tedivm/stash-bundle": "0.4.*",
         "guzzlehttp/guzzle": "~5.0",
         "ongr/elasticsearch-bundle": "dev-master"
-
-        ,"ongr/elasticsearch-dsl": "dev-master"
     },
     "require-dev": {
         "symfony/monolog-bundle": "~2.5",
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "~2.0"
+        "squizlabs/php_codesniffer": "~2.0",
+        "satooshi/php-coveralls": "~0.7"
     },
     "autoload": {
         "psr-4": { "ONGR\\CurrencyExchangeBundle\\": "" }
