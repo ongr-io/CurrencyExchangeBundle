@@ -1,18 +1,11 @@
 parameters:
-    # Currency rate
-    ongr_currency_exchange.currency_rates_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService
-    ongr_currency_exchange.currency_exchange_service.class: ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService
-    ongr_currency_exchange.open_exchange_driver.class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver
-    ongr_currency_exchange.ecb_driver.class: ONGR\CurrencyExchangeBundle\Driver\EcbDriver
-
-    # Currency display extension
-    ongr_currency_exchange.twig.price_extension.class: ONGR\CurrencyExchangeBundle\Twig\PriceExtension
+    # TODO: make all parameters configurable
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
     ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
 
 services:
     ongr_currency_exchange.twig.price_extension:
-        class: %ongr_currency_exchange.twig.price_extension.class%
+        class: ONGR\CurrencyExchangeBundle\Twig\PriceExtension
         tags:
           - { name: twig.extension }
         arguments:
@@ -24,15 +17,16 @@ services:
           - %ongr_currency_exchange.twig.price_extension.to_print_list%
 
     ongr_currency_exchange.currency_exchange_service:
-        class: %ongr_currency_exchange.currency_exchange_service.class%
+        class: ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService
         arguments:
-            - @ongr_currency_exchange.currency_rates_service
+            - "@ongr_currency_exchange.currency_rates_service"
             - %ongr_currency_exchange.default_currency%
 
    #Currency exchange drivers
     #European central bank driver
     ongr_currency_exchange.ecb_driver:
-        class: %ongr_currency_exchange.ecb_driver.class%
+        class: ONGR\CurrencyExchangeBundle\Driver\EcbDriver
+
     #Open exhange rates driver
     ongr_currency_exchange.open_exchange_driver:
-        class: %ongr_currency_exchange.open_exchange_driver.class%
+        class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver

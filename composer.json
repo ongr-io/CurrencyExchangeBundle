@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.5",
         "symfony/symfony": "~2.7|~3.0",
-        "tedivm/stash-bundle": "0.4.*",
+        "tedivm/stash-bundle": "^0.5.3",
         "guzzlehttp/guzzle": "~5.0",
         "ongr/elasticsearch-bundle": "dev-master"
     },

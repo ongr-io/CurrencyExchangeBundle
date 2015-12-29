@@ -16,10 +16,10 @@ use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
 use ONGR\CurrencyExchangeBundle\Document\RatesObject;
 use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
+use ONGR\ElasticsearchBundle\Result\Result;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchBundle\Service\Manager;
-use ONGR\ElasticsearchBundle\Service\Repository;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Stash\Interfaces\ItemInterface;
@@ -112,7 +112,7 @@ class CurrencyRatesService implements LoggerAwareInterface
         $search->addQuery($query);
         $search->setSize(1);
         try {
-            $results = $repository->execute($search, Repository::RESULTS_ARRAY);
+            $results = $repository->execute($search, Result::RESULTS_ARRAY);
         } catch (Missing404Exception $e) {
             $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
 
