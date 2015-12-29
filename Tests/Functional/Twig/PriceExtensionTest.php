@@ -26,10 +26,21 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testGetPriceList()
     {
+        $currencyService = $this->getMockBuilder('ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService')
+            ->setMethods(['calculateRate'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $callback = function ($amount, $toCurrency, $fromCurrency = null) {
+            return $amount;
+        };
+        $currencyService->expects($this->any())->method('calculateRate')->willReturnCallback($callback);
+
         $container = self::createClient()->getContainer();
         $twig = $container->get('twig');
         /** @var PriceExtension $extension */
         $extension = $container->get('ongr_currency_exchange.twig.price_extension');
+        $extension->setCurrencyExchangeService($currencyService);
         $currencies = ['EUR', 'LTL'];
         $extension->setToListMap($currencies);
         $extension->setFormatsMap(array_combine($currencies, ['%s EUR', '%s LTL']));

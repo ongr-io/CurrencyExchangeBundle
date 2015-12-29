@@ -26,7 +26,7 @@ class CurrencyDocument
     /**
      * @var RatesObject
      *
-     * @ES\Property(type="object", multiple=true, objectName="ONGRCurrencyExchangeBundle:RatesObject")
+     * @ES\Embedded(class="ONGRCurrencyExchangeBundle:RatesObject", multiple=true)
      */
     public $rates;
 
