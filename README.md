@@ -5,7 +5,7 @@ gives a solution to fetch and store current currency rates, to convert prices
 and display them in Twig templates.
 
 [![Build Status](https://travis-ci.org/ongr-io/CurrencyExchangeBundle.svg?branch=master)](https://travis-ci.org/ongr-io/CurrencyExchangeBundle)
-[![Coverage](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/ongr-io/CurrencyExchangeBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/ongr-io/CurrencyExchangeBundle?branch=master)
 [![Stable Release](https://poser.pugx.org/ongr/currency-exchange-bundle/v/stable.svg)](https://packagist.org/packages/ongr/currency-exchange-bundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/?branch=master)
 
