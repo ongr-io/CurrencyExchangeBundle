@@ -16,9 +16,6 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: 201204261
-        assets_base_urls:
-            http: [%cdn_url%]
-            ssl: [%cdn_url_ssl%]
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:         ~

@@ -63,7 +63,7 @@ class ONGRCurrencyExchangeExtension extends Extension
 
         if ($container->hasDefinition($driver)) {
             $def = new Definition(
-                $container->getParameter('ongr_currency_exchange.currency_rates_service.class'),
+                'ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService',
                 [
                     new Reference($driver),
                     new Reference(sprintf('es.manager.%s', $config['es_manager'])),

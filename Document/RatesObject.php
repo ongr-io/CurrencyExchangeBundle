@@ -23,14 +23,14 @@ class RatesObject
     /**
      * @var string
      *
-     * @ES\Property(name="name", type="string")
+     * @ES\Property(type="string")
      */
     public $name;
 
     /**
      * @var float
      *
-     * @ES\Property(name="value", type="float")
+     * @ES\Property(type="float")
      */
     public $value;
 

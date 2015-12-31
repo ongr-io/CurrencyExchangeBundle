@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.5",
         "symfony/symfony": "~2.7|~3.0",
-        "tedivm/stash-bundle": "0.4.*",
+        "tedivm/stash-bundle": "^0.5.3",
         "guzzlehttp/guzzle": "~5.0",
         "ongr/elasticsearch-bundle": "dev-master"
     },
@@ -22,7 +22,7 @@
         "symfony/monolog-bridge": "~2.4",
         "phpunit/phpunit": "~4.1",
         "squizlabs/php_codesniffer": "~2.0",
-        "satooshi/php-coveralls": "~0.7"
+        "satooshi/php-coveralls": "~1.0"
     },
     "autoload": {
         "psr-4": { "ONGR\\CurrencyExchangeBundle\\": "" }
