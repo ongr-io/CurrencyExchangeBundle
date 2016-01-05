@@ -11,8 +11,6 @@
 
 namespace ONGR\CurrencyExchangeBundle\Driver;
 
-use GuzzleHttp\Client;
-
 /**
  * This class downloads exchange rates from openexchangerates.org.
  */
@@ -24,9 +22,9 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     private $appId;
 
     /**
-     * @var null|Client
+     * @var string
      */
-    private $httpClient;
+    const REQUEST_URI = 'http://openexchangerates.org/api/latest.json?app_id=%s';
 
     /**
      * @return string
@@ -45,26 +43,20 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     }
 
     /**
-     * @param null|Client $httpClient
-     */
-    public function __construct(Client $httpClient = null)
-    {
-        $this->httpClient = $httpClient ? $httpClient : new Client();
-    }
-
-    /**
      * Downloads raw currency data.
      *
      * @return array
      */
     private function getRawData()
     {
-        $request = $this->httpClient->get(
-            'http://openexchangerates.org/api/latest.json',
-            ['query' => ['app_id' => $this->getAppId()]]
-        );
+        $ch = curl_init(sprintf(self::REQUEST_URI, $this->appId));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if (($json = curl_exec($ch)) === false) {
+            return [];
+        }
+        curl_close($ch);
 
-        return $request->json();
+        return json_decode($json, true);
     }
 
     /**
