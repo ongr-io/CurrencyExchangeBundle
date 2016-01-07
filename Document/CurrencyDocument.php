@@ -12,16 +12,14 @@
 namespace ONGR\CurrencyExchangeBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
-use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 
 /**
  * Stores currency rates.
  *
- * @ES\Document(type="currency", ttl={"enabled":true, "default": "14d"})
+ * @ES\Document(type="currency")
  */
 class CurrencyDocument
 {
-    use DocumentTrait;
 
     /**
      * @var RatesObject
@@ -36,6 +34,11 @@ class CurrencyDocument
      * @ES\Property(type="date")
      */
     public $createdAt;
+
+    /**
+     * @ES\Ttl(default="14d")
+     */
+    public $ttl;
 
     /**
      * @return RatesObject
