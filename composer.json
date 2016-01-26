@@ -14,7 +14,7 @@
         "php": ">=5.5",
         "symfony/symfony": "~2.7|~3.0",
         "tedivm/stash-bundle": "^0.5.3",
-        "ongr/elasticsearch-bundle": "dev-master"
+        "ongr/elasticsearch-bundle": "~1.0"
     },
     "require-dev": {
         "symfony/monolog-bundle": "~2.5",
@@ -30,6 +30,13 @@
     "autoload": {
         "psr-4": {
             "ONGR\\CurrencyExchangeBundle\\": ""
+        },
+        "exclude-from-classmap": ["/Tests/"]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
         }
     }
 }
