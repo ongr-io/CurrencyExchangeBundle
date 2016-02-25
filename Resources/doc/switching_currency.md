@@ -1,7 +1,7 @@
 Switching Currency on Client Side
 ===
 
-This document shows an example how to implement language switching on the
+This document shows an example how to implement currency switching on the
 client side using helpers provided by this bundle. 
 
 This bundle provides widgets based on jQuery, so first step is to include
