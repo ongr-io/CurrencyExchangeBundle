@@ -7,7 +7,7 @@ and display them in Twig templates.
 
 [![Stable Release](https://poser.pugx.org/ongr/currency-exchange-bundle/v/stable.svg)](https://packagist.org/packages/ongr/currency-exchange-bundle)
 [![Build Status](https://travis-ci.org/ongr-io/CurrencyExchangeBundle.svg?branch=master)](https://travis-ci.org/ongr-io/CurrencyExchangeBundle)
-[![Coverage](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ongr-io/CurrencyExchangeBundle/badge.svg?branch=master)](https://coveralls.io/github/ongr-io/CurrencyExchangeBundle?branch=master)
 [![Quality Score](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/CurrencyExchangeBundle/?branch=master)
 
 Documentation
