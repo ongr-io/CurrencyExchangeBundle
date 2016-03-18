@@ -15,6 +15,7 @@ use ONGR\CurrencyExchangeBundle\Service\CurrencyRatesService;
 use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
 use ONGR\ElasticsearchBundle\Service\Manager;
 use ONGR\ElasticsearchBundle\Service\Repository;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 /**
  * This class holds unit tests for currency rates service.
@@ -55,6 +56,32 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         'UZS' => '2988.6321',
         'VEF' => '8.6630',
         'VND' => '29105.6858',
+    ];
+
+    /**
+     * @var array
+     */
+    private $result = [
+        [
+            'rates' => [
+                [
+                    'name' => 'EUR',
+                    'value' => 1
+                ],
+                [
+                    'name' => 'USD',
+                    'value' => 1.12
+                ]
+            ]
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    private $rates = [
+        'EUR' => 1,
+        'USD' => 1.12
     ];
 
     /**
@@ -200,6 +227,58 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         // Test local cache.
         $this->assertEquals($this->ratesFixture, $service->getRates());
+    }
+
+    /**
+     * Test if we are able to retrieve rates from backup.
+     */
+    public function testGetRatesFromBackup()
+    {
+        $this->repositoryMock->expects($this->any())->method('execute')->willReturn($this->result);
+
+        $pool = $this->getMock('Stash\Interfaces\PoolInterface');
+        $item = $this->getCacheItem(null);
+        $item->expects($this->once())->method('set')->with($this->rates);
+        $pool->expects($this->any())->method('getItem')->with('ongr_currency')->will(
+            $this->returnValue($item)
+        );
+        $loader = $this->getDriverMock('EUR', $this->ratesFixture);
+
+        $service = new CurrencyRatesService($loader, $this->esManagerMock, $pool);
+        $service->setLogger($this->getLogger());
+
+        $this->assertEquals($this->rates, $service->getRates());
+    }
+
+    /**
+     * Tests get rates from backup with exceptions
+     *
+     * @expectedException \Elasticsearch\Common\Exceptions\Missing404Exception
+     */
+    public function testRateRepositoryAndManagerFail()
+    {
+        $this->repositoryMock->expects($this->any())->method('execute')->willThrowException(
+            new Missing404Exception()
+        );
+
+        $pool = $this->getMock('Stash\Interfaces\PoolInterface');
+        $item = $this->getCacheItem(null);
+        $pool->expects($this->any())->method('getItem')->with('ongr_currency')->will(
+            $this->returnValue($item)
+        );
+        $loader = $this->getDriverMock('EUR', $this->ratesFixture);
+
+        $service = new CurrencyRatesService($loader, $this->esManagerMock, $pool);
+        $service->setLogger($this->getLogger());
+
+        $this->assertEquals($this->ratesFixture, $service->getRates());
+
+        $service->rates = null;
+        $this->esManagerMock->method('commit')->willThrowException(
+            new Missing404Exception()
+        );
+
+        $service->getRates();
     }
 
     /**
