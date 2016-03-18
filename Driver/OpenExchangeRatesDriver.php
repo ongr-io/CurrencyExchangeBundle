@@ -64,7 +64,7 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
             ['query' => ['app_id' => $this->getAppId()]]
         );
 
-        return $request->json();
+        return json_decode($request->getBody(), true);
     }
 
     /**
