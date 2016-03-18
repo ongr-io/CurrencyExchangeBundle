@@ -22,7 +22,7 @@ class EcbDriver implements CurrencyDriverInterface
     public function getRates()
     {
         $rates = [];
-        $xml = @simplexml_load_file('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
+        $xml = simplexml_load_file('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
         $data = $xml->xpath('//gesmes:Envelope/*[3]/*');
         foreach ($data[0]->children() as $child) {
             $code = (string)$child->attributes()->currency;

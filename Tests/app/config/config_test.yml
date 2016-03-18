@@ -75,5 +75,3 @@ services:
         class: ONGR\CurrencyExchangeBundle\Tests\FooSettingsProvider
         tags:
             - { name: ongr_currency_exchange.settings_provider, method: getFooSets } # method attribute is optional
-
-
