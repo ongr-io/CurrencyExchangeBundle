@@ -1,5 +1,4 @@
 parameters:
-    # TODO: make all parameters configurable
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
     ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
 
