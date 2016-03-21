@@ -24,6 +24,11 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     private $appId;
 
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
      * @var null|Client
      */
     private $httpClient;
@@ -46,10 +51,12 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
 
     /**
      * @param null|Client $httpClient
+     * @param string $url
      */
-    public function __construct(Client $httpClient = null)
+    public function __construct(Client $httpClient, $url)
     {
-        $this->httpClient = $httpClient ? $httpClient : new Client();
+        $this->httpClient = $httpClient;
+        $this->url = $url;
     }
 
     /**
@@ -60,7 +67,7 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     private function getRawData()
     {
         $request = $this->httpClient->get(
-            'http://openexchangerates.org/api/latest.json',
+            $this->url,
             ['query' => ['app_id' => $this->getAppId()]]
         );
 

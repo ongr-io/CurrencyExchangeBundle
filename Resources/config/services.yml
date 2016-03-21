@@ -1,6 +1,8 @@
 parameters:
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
     ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
+    ongr_currency_exchange.ecb_driver.url: 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
+    ongr_currency_exchange.open_exchange_driver.url: 'http://openexchangerates.org/api/latest.json'
 
 services:
     ongr_currency_exchange.twig.price_extension:
@@ -21,11 +23,21 @@ services:
             - "@ongr_currency_exchange.currency_rates_service"
             - %ongr_currency_exchange.default_currency%
 
+    #guzzle client to use in drivers
+    guzzle.client:
+        class: GuzzleHttp\Client
+
    #Currency exchange drivers
     #European central bank driver
     ongr_currency_exchange.ecb_driver:
         class: ONGR\CurrencyExchangeBundle\Driver\EcbDriver
+        arguments:
+          - "@guzzle.client"
+          - %ongr_currency_exchange.ecb_driver.url%
 
     #Open exhange rates driver
     ongr_currency_exchange.open_exchange_driver:
         class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver
+        arguments:
+          - "@guzzle.client"
+          - %ongr_currency_exchange.ecb_driver.url%
