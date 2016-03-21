@@ -61,7 +61,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('driver')
                     ->defaultValue('ongr_currency_exchange.ecb_driver')
-                    ->info('Elasticsearch manager to use in router')
+                    ->info('Currency driver to use in currency rate service')
                 ->end()
                 ->scalarNode('open_exchange_rates_api_id')
                     ->defaultNull()
