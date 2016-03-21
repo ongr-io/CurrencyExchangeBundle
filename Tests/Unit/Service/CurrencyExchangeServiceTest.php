@@ -50,7 +50,7 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $mock->expects($this->any())->method('getRates')->will($this->returnValue($rates));
-        $mock->expects($this->any())->method('getDefaultCurrency')->will($this->returnValue($base));
+        $mock->expects($this->any())->method('getBaseCurrency')->will($this->returnValue($base));
 
         return $mock;
     }
@@ -92,6 +92,7 @@ class CurrencyExchangeServiceTest extends \PHPUnit_Framework_TestCase
             [100, 'EUR', 'USD', 200],
             [100, 'LTL', 'USD', 50],
             [100, 'LTL', 'EUR', 25],
+            [100, 'LTL', 'LTL', 100],
         ];
     }
 
