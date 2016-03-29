@@ -91,7 +91,18 @@ class ONGRCurrencyExchangeExtension extends Extension
             'ongr_currency_exchange.twig.price_extension.to_print_list',
             array_keys($config['currencies'])
         );
-
+        if (isset($config['currency_sign'])) {
+            $container->setParameter(
+                'ongr_currency_exchange.twig.price_extension.currency.sign',
+                $config['currency_sign']
+            );
+        }
+        if (isset($config['default_currency'])) {
+            $container->setParameter(
+                'ongr_currency_exchange.twig.price_extension.currency.name',
+                $config['default_currency']
+            );
+        }
         if (isset($config['separators']['decimal'])) {
             $container->setParameter(
                 'ongr_currency_exchange.twig.price_extension.currency.dec_point_separator',
@@ -102,6 +113,18 @@ class ONGRCurrencyExchangeExtension extends Extension
             $container->setParameter(
                 'ongr_currency_exchange.twig.price_extension.currency.thousands_separator',
                 $config['separators']['thousands']
+            );
+        }
+        if (isset($config['templates']['currency_list'])) {
+            $container->setParameter(
+                'ongr_currency_exchange.twig.price_extension.currency.currency_list_template',
+                $config['templates']['currency_list']
+            );
+        }
+        if (isset($config['templates']['price_list'])) {
+            $container->setParameter(
+                'ongr_currency_exchange.twig.price_extension.currency.price_list_template',
+                $config['templates']['price_list']
             );
         }
         $container->setParameter(

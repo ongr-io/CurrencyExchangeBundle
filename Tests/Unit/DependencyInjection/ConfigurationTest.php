@@ -32,6 +32,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'default_currency' => 'EUR',
             'currencies' => [],
             'separators' => ['decimal' => ',', 'thousands' => '.'],
+            'currency_sign' => '€',
+            'templates' => [
+                'currency_list' => 'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+                'price_list' => 'ONGRCurrencyExchangeBundle::price_list.html.twig'
+            ],
             'driver' => 'ongr_currency_exchange.ecb_driver',
             'open_exchange_rates_api_id' => null,
         ];
