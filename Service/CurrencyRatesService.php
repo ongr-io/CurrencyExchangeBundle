@@ -17,6 +17,7 @@ use ONGR\CurrencyExchangeBundle\Document\RatesObject;
 use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchBundle\Result\Result;
+use ONGR\ElasticsearchBundle\Collection\Collection;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchBundle\Service\Manager;
@@ -157,21 +158,20 @@ class CurrencyRatesService implements LoggerAwareInterface
      */
     public function reloadRates()
     {
-        $esRates = [];
         $this->rates = $this->driver->getRates();
 
         /** @var CurrencyDocument $document */
         $document = new CurrencyDocument();
         $document->setCreatedAt(new \DateTime());
+        $document->rates = new Collection();
 
         if ($this->rates) {
             foreach ($this->rates as $name => $value) {
                 $ratesObject = new RatesObject();
                 $ratesObject->setName($name);
                 $ratesObject->setValue($value);
-                $esRates[] = $ratesObject;
+                $document->rates[] = $ratesObject;
             }
-            $document->rates = $esRates;
             $this->manager->persist($document);
             $this->manager->commit();
             $this->updateRatesCache($this->rates);
