@@ -71,7 +71,7 @@ ongr_elasticsearch:
             mappings:
                 # ...
                 - AppBundle
-                - ONGRTranslationsBundle
+                - ONGRCurrencyExchangeBundle
 ```
 
 Once the bundle is added open console and run command to update mapping in
