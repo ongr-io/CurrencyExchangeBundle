@@ -12,6 +12,7 @@
 namespace ONGR\CurrencyExchangeBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
+use ONGR\ElasticsearchBundle\Collection\Collection;
 
 /**
  * Stores currency rates.
@@ -20,25 +21,28 @@ use ONGR\ElasticsearchBundle\Annotation as ES;
  */
 class CurrencyDocument
 {
-
     /**
      * @var RatesObject
      *
      * @ES\Embedded(class="ONGRCurrencyExchangeBundle:RatesObject", multiple=true)
      */
-    public $rates;
+    private $rates;
 
     /**
      * @var \DateTime
      *
      * @ES\Property(type="date")
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
-     * @ES\Ttl(default="14d")
+     * CurrencyDocument constructor.
      */
-    public $ttl;
+    public function __construct()
+    {
+        $this->rates = new Collection();
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * @return RatesObject
@@ -54,6 +58,14 @@ class CurrencyDocument
     public function setRates($rates)
     {
         $this->rates = $rates;
+    }
+
+    /**
+     * @param RatesObject $rate
+     */
+    public function addRate($rate)
+    {
+        $this->rates[] = $rate;
     }
 
     /**
