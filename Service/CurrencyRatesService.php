@@ -17,11 +17,9 @@ use ONGR\CurrencyExchangeBundle\Document\RatesObject;
 use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchBundle\Result\Result;
-use ONGR\ElasticsearchBundle\Collection\Collection;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchBundle\Service\Manager;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Stash\Interfaces\ItemInterface;
 use Stash\Interfaces\PoolInterface;
@@ -29,7 +27,7 @@ use Stash\Interfaces\PoolInterface;
 /**
  * This class provides currency rates.
  */
-class CurrencyRatesService implements LoggerAwareInterface
+class CurrencyRatesService
 {
     use LoggerAwareTrait;
 
@@ -162,15 +160,13 @@ class CurrencyRatesService implements LoggerAwareInterface
 
         /** @var CurrencyDocument $document */
         $document = new CurrencyDocument();
-        $document->setCreatedAt(new \DateTime());
-        $document->rates = new Collection();
-
+        
         if ($this->rates) {
             foreach ($this->rates as $name => $value) {
                 $ratesObject = new RatesObject();
                 $ratesObject->setName($name);
                 $ratesObject->setValue($value);
-                $document->rates[] = $ratesObject;
+                $document->addRate($ratesObject);
             }
             $this->manager->persist($document);
             $this->manager->commit();
