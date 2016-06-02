@@ -13,6 +13,8 @@ services:
           - %ongr_currency_exchange.twig.price_extension.currency.sign%
           - %ongr_currency_exchange.twig.price_extension.currency.dec_point_separator%
           - %ongr_currency_exchange.twig.price_extension.currency.thousands_separator%
+          - %ongr_currency_exchange.twig.price_extension.currency.currency_list_template%
+          - %ongr_currency_exchange.twig.price_extension.currency.price_list_template%
           - %ongr_currency_exchange.twig.price_extension.currency.name%
           - %ongr_currency_exchange.twig.price_extension.display_map%
           - %ongr_currency_exchange.twig.price_extension.to_print_list%

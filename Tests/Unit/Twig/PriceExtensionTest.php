@@ -63,6 +63,8 @@ class PriceExtensionTest extends WebTestCase
             null,
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 1.
         $out[] = [
@@ -75,6 +77,8 @@ class PriceExtensionTest extends WebTestCase
             null,
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 2.
         $out[] = [
@@ -87,6 +91,8 @@ class PriceExtensionTest extends WebTestCase
             null,
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 3.
         $out[] = [
@@ -99,6 +105,8 @@ class PriceExtensionTest extends WebTestCase
             null,
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 4.
         $out[] = [
@@ -111,6 +119,8 @@ class PriceExtensionTest extends WebTestCase
             null,
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 5: base currency different than the one that we are converting to.
         $out[] = [
@@ -125,6 +135,8 @@ class PriceExtensionTest extends WebTestCase
             // Value fromCurrency.
             'EUR',
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 6: custom format to price.
         $out[] = [
@@ -139,6 +151,8 @@ class PriceExtensionTest extends WebTestCase
             // Value fromCurrency.
             'EUR',
             '$ %s $',
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
         // Case 7: converting to USD.
         $out[] = [
@@ -152,6 +166,8 @@ class PriceExtensionTest extends WebTestCase
             'USD',
             null,
             null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
 
         return $out;
@@ -169,6 +185,8 @@ class PriceExtensionTest extends WebTestCase
      * @param string $toCurrency
      * @param string $fromCurrency
      * @param string $customFormat
+     * @param string $currency_list
+     * @param string $price_list
      *
      * @dataProvider testGetFormattedPriceData()
      */
@@ -181,7 +199,9 @@ class PriceExtensionTest extends WebTestCase
         $decimalPlaces,
         $toCurrency,
         $fromCurrency,
-        $customFormat
+        $customFormat,
+        $currency_list,
+        $price_list
     ) {
         $rates = [
             'EUR' => '1',
@@ -195,7 +215,16 @@ class PriceExtensionTest extends WebTestCase
         ];
 
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension($currencySign, $decPointSeparator, $thousandsSeparator, null, $formatsMap);
+        $extension = new PriceExtension(
+            $currencySign,
+            $decPointSeparator,
+            $thousandsSeparator,
+            $currency_list,
+            $price_list,
+            null,
+            $formatsMap,
+            null
+        );
         // EUR set by default.
         $extension->setCurrency('EUR');
         $extension->setCurrencyExchangeService($exchangeService);
@@ -211,7 +240,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testGetFunctions()
     {
-        $extension = new PriceExtension('', '', '');
+        $extension = new PriceExtension('', '', '', '', '', null, null, null);
         $this->assertNotEmpty($extension->getFunctions(), 'Extension should contain functions.');
     }
 
@@ -234,7 +263,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testGetFilters($filter)
     {
-        $extension = new PriceExtension('', '', '');
+        $extension = new PriceExtension('', '', '', '', '', null, null, null);
 
         $filters = $extension->getFilters();
 
@@ -257,7 +286,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testGetName()
     {
-        $extension = new PriceExtension('', '', '');
+        $extension = new PriceExtension('', '', '', '', '', null, null, null);
         $this->assertEquals('price_extension', $extension->getName());
     }
 
@@ -266,7 +295,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testCurrencySetter()
     {
-        $extension = new PriceExtension('', '', '');
+        $extension = new PriceExtension('', '', '', '', '', null, null, null);
         $extension->setCurrency('USD');
 
         $this->assertEquals('USD', $extension->getCurrency());
@@ -277,7 +306,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testDefaultCurrency()
     {
-        $extension = new PriceExtension('', '.', '', 'EUR');
+        $extension = new PriceExtension('', '.', '', '', '', 'EUR', null, null);
 
         $this->assertEquals('EUR', $extension->getCurrency());
     }
@@ -318,7 +347,7 @@ class PriceExtensionTest extends WebTestCase
     {
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
 
-        $extension = new PriceExtension('', '.', '', $currency);
+        $extension = new PriceExtension('', '.', '', '', '', $currency, null, null);
         $extension->setCurrencyExchangeService($exchangeService);
 
         $result = $extension->getFormattedPrice($price, 0);
@@ -343,7 +372,7 @@ class PriceExtensionTest extends WebTestCase
 
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
 
-        $extension = new PriceExtension('', '.', '', 'EUR', $formatMap);
+        $extension = new PriceExtension('', '.', '', '', '', 'EUR', $formatMap, null);
         $extension->setCurrencyExchangeService($exchangeService);
 
         $result = $extension->getFormattedPrice(1000, 0, null, null);
@@ -387,7 +416,11 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $out[] = [$rates, $toPrintList, $formatsMap, $expectedParams];
+        $templates = [
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
+        ];
+        $out[] = [$rates, $toPrintList, $formatsMap, $expectedParams, $templates];
         // Case #1 printlist currencies with one format specified.
         $formatsMap = [
             'SEK' => '%s Svensk krona',
@@ -404,7 +437,7 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $out[] = [$rates, $toPrintList, $formatsMap, $expectedParams];
+        $out[] = [$rates, $toPrintList, $formatsMap, $expectedParams, $templates];
 
         return $out;
     }
@@ -419,10 +452,10 @@ class PriceExtensionTest extends WebTestCase
      *
      * @dataProvider testPriceListFormattingData
      */
-    public function testPriceListFormatting($rates, $toPrintList, $formatMap, $expectedParams)
+    public function testPriceListFormatting($rates, $toPrintList, $formatMap, $expectedParams, $templates)
     {
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension('EUR', '.', '', 'EUR', $formatMap, $toPrintList);
+        $extension = new PriceExtension('EUR', '.', '', $templates[0], $templates[1], 'EUR', $formatMap, $toPrintList);
         $extension->setCurrencyExchangeService($exchangeService);
         $env = $this->getMock('stdClass', ['render']);
         $env->expects($this->once())->method('render')->with(
@@ -451,6 +484,10 @@ class PriceExtensionTest extends WebTestCase
             'EUR',
             'LTL',
         ];
+        $templates = [
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
+        ];
         // Case #1 the default currency is used.
         $expectedParams = [
             'prices' => [
@@ -464,7 +501,7 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $out[] = [$rates, $toPrintList, 'EUR', 100, $expectedParams];
+        $out[] = [$rates, $toPrintList, 'EUR', 100, $expectedParams, $templates];
         // Case #2 currency not in the toPrintlist is used.
         $expectedParams = [
             'prices' => [
@@ -478,7 +515,7 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $out[] = [$rates, $toPrintList, 'USD', 100, $expectedParams];
+        $out[] = [$rates, $toPrintList, 'USD', 100, $expectedParams, $templates];
         // Case #3 currency in the toPrintlist is used.
         $expectedParams = [
             'prices' => [
@@ -492,7 +529,7 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $out[] = [$rates, $toPrintList, 'LTL', 100, $expectedParams];
+        $out[] = [$rates, $toPrintList, 'LTL', 100, $expectedParams, $templates];
 
         return $out;
     }
@@ -505,13 +542,14 @@ class PriceExtensionTest extends WebTestCase
      * @param string $currency
      * @param int    $price
      * @param array  $expectedParams
+     * @param array $templates
      *
      * @dataProvider testPriceListWithCurrencyData
      */
-    public function testPriceListWithCurrency($rates, $toPrintList, $currency, $price, $expectedParams)
+    public function testPriceListWithCurrency($rates, $toPrintList, $currency, $price, $expectedParams, $templates)
     {
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension('', '.', '', $currency, null, $toPrintList);
+        $extension = new PriceExtension('', '.', '', $templates[0], $templates[1], $currency, null, $toPrintList);
         $extension->setCurrencyExchangeService($exchangeService);
         $env = $this->getMock('stdClass', ['render']);
         $env->expects($this->once())->method('render')->with(
@@ -535,8 +573,12 @@ class PriceExtensionTest extends WebTestCase
             'EUR',
             'LTL',
         ];
+        $templates = [
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
+        ];
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension('', '.', '', 'EUR', null, $toPrintList);
+        $extension = new PriceExtension('', '.', '', '', $templates[1], 'EUR', null, $toPrintList);
         $extension->setCurrencyExchangeService($exchangeService);
         $expectedParams = [
             'prices' => [
@@ -573,8 +615,12 @@ class PriceExtensionTest extends WebTestCase
             'LTL',
             'USD',
         ];
+        $templates = [
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig'
+        ];
         $exchangeService = new CurrencyExchangeService($this->getRatesService($rates, 'EUR'), 'EUR');
-        $extension = new PriceExtension('', '.', '', 'EUR', null, $toPrintList);
+        $extension = new PriceExtension('', '.', '', $templates[0], '', 'EUR', null, $toPrintList);
         $extension->setCurrencyExchangeService($exchangeService);
         $expectedParams = [
             'currencies' => [
@@ -608,7 +654,7 @@ class PriceExtensionTest extends WebTestCase
      */
     public function testNoCurrencyExchange()
     {
-        $extension = new PriceExtension('', '.', '', 'EUR', null, []);
+        $extension = new PriceExtension('', '.', '', '', '', 'EUR', null, []);
 
         $this->assertEquals('', $extension->getFormattedPrice(2, 0, 'a', 'b'));
     }
@@ -619,7 +665,7 @@ class PriceExtensionTest extends WebTestCase
     public function testUndefinedCurrency()
     {
         $exchangeService = new CurrencyExchangeService($this->getRatesService([], 'EUR'), 'EUR');
-        $extension = new PriceExtension('', '.', '', 'EUR', null, []);
+        $extension = new PriceExtension('', '.', '', '', '', 'EUR', null, []);
         $extension->setCurrencyExchangeService($exchangeService);
         $extension->setLogger($this->getLogger());
 
