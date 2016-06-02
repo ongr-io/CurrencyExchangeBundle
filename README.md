@@ -74,13 +74,6 @@ ongr_elasticsearch:
                 - ONGRCurrencyExchangeBundle
 ```
 
-Once the bundle is added open console and run command to update mapping in
-Elasticsearch:
-
-```bash
-$ app/console ongr:es:mapping:update --force
-```
-
 ### Step 4: Configure Cache Layer
 
 Add configuration for `TedivmStashBundle`. To get started quickly you can use
@@ -146,7 +139,8 @@ a simple example how to convert currency:
 </ul>
 ```
 
-This example will print the following information:
+In this example the number 2 represents the number of decimal points. It will print the following
+information:
 
 ```
 Price in default currency: 123.12 €

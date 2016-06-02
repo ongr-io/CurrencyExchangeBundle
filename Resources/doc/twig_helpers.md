@@ -78,8 +78,6 @@ Or you can pass custom template on runtime:
 {{ ongr_currency_list('AppBundle::currency_list.html.twig') }}
 ```                                                          
 
-For detailed usage example check [Switching Currency on Client Side][2] page.
-
 ### Custom Currency List Template
 
 You can use custom template if you want. When template is rendered `currencies`
@@ -90,4 +88,3 @@ array will be passed to it. Here is the list of available keys:
 - `default` - TRUE if this currency is default, FALSE otherwise.
     
 [1]: http://en.wikipedia.org/wiki/ISO_4217
-[2]: switching_currency.md
