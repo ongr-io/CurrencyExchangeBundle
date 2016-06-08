@@ -90,9 +90,11 @@ class CurrencyRatesService
             return $this->rates[$date];
         }
 
-        $this->rates = $this->getRatesFromBackup();
+        $this->rates = $this->getRatesFromBackup($date);
         if (isset($this->rates[$date])) {
             return $this->rates[$date];
+        } elseif ($date != $this->getCurrentDate()) {
+            throw new RatesNotLoadedException('Currency rates for '.$date.' are not loaded and could not be loaded on demand');
         }
 
         $this->reloadRates();
