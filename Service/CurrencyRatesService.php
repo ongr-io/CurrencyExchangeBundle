@@ -94,14 +94,18 @@ class CurrencyRatesService
         if (isset($this->rates[$date])) {
             return $this->rates[$date];
         } elseif ($date != $this->getCurrentDate()) {
-            throw new RatesNotLoadedException('Currency rates for '.$date.' are not loaded and could not be loaded on demand');
+            throw new RatesNotLoadedException(
+                'Currency rates for '.$date.' are not loaded and could not be loaded on demand'
+            );
         }
 
         $this->reloadRates();
         if (isset($this->rates[$date])) {
             return $this->rates[$date];
         }
-        throw new RatesNotLoadedException('Currency rates for '.$date.' are not loaded and could not be loaded on demand');
+        throw new RatesNotLoadedException(
+            'Currency rates for '.$date.' are not loaded and could not be loaded on demand'
+        );
     }
 
     /**
