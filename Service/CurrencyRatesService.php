@@ -18,6 +18,7 @@ use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchBundle\Result\Result;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
+use ONGR\ElasticsearchDSL\Query\MatchQuery;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchBundle\Service\Manager;
@@ -121,14 +122,8 @@ class CurrencyRatesService
         $rates = [];
         $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
         $search = $repository->createSearch();
-        $search->addFilter(
-            new RangeQuery(
-                'created_at',
-                [
-                    'gte' => $date.'T00:00:00',
-                    'lte'   => $date.'T23:59:59',
-                ]
-            )
+        $search->addQuery(
+            new MatchQuery('creation_date', $date)
         );
         $search->setSize(1);
         try {

@@ -36,12 +36,20 @@ class CurrencyDocument
     private $createdAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ES\Property(type="date", options={"format":"yyyy-MM-dd"})
+     */
+    private $creationDate;
+
+    /**
      * CurrencyDocument constructor.
      */
     public function __construct()
     {
         $this->rates = new Collection();
         $this->createdAt = new \DateTime();
+        $this->creationDate = date('Y-m-d');
     }
 
     /**
@@ -82,5 +90,21 @@ class CurrencyDocument
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param \DateTime $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
     }
 }
