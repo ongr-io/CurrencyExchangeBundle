@@ -120,26 +120,14 @@ class CurrencyRatesService
     {
         $date = $date == '' ? $this->getCurrentDate() : $date;
         $rates = [];
-        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
-        $search = $repository->createSearch();
-        $search->addQuery(
-            new MatchQuery('creation_date', $date)
-        );
-        $search->setSize(1);
-        try {
-            $results = $repository->execute($search, Result::RESULTS_ARRAY);
-        } catch (Missing404Exception $e) {
-            $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
+        $currency = $this->getCurrencyFromEs($date);
 
-            return null;
-        }
-
-        if (count($results)) {
-            foreach ($results[0]['rates'] as $data) {
+        if (!empty($currency)) {
+            foreach ($currency['rates'] as $data) {
                 $rates[$data['name']] = $data['value'];
             }
             $this->logger && $this->logger->notice('Rates returned from ES. Cache updated.');
-            $this->updateRatesCache($rates, new \DateTime($results[0]['created_at']));
+            $this->updateRatesCache($rates, new \DateTime($currency['created_at']));
 
             return [$date => $rates];
         }
@@ -178,6 +166,15 @@ class CurrencyRatesService
     public function reloadRates()
     {
         $date = $this->getCurrentDate();
+
+        $esCurrency = $this->getCurrencyFromEs($date);
+        if (!empty($esCurrency)) {
+            $this->rates = [
+                $date => $esCurrency['rates']
+            ];
+            return $this->rates;
+        }
+
         $rates = $this->driver->getRates();
 
         if ($rates) {
@@ -226,5 +223,31 @@ class CurrencyRatesService
     {
         $now = new \DateTime();
         return $now->format('Y-m-d');
+    }
+
+    /**
+     * Returns an array representing a currency for a specific date from ES
+     *
+     * @param string $date
+     *
+     * @returns array
+     */
+    private function getCurrencyFromEs($date)
+    {
+        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
+        $search = $repository->createSearch();
+        $search->addQuery(
+            new MatchQuery('creation_date', $date)
+        );
+        $search->setSize(1);
+        try {
+            $results = $repository->execute($search, Result::RESULTS_ARRAY);
+        } catch (Missing404Exception $e) {
+            $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
+
+            return null;
+        }
+
+        return count($results) > 0 ? $results[0] : [];
     }
 }
