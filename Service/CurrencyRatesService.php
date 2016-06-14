@@ -237,7 +237,7 @@ class CurrencyRatesService
         $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
         $search = $repository->createSearch();
         $search->addQuery(
-            new MatchQuery('creation_date', $date)
+            new MatchQuery('date', $date)
         );
         $search->setSize(1);
         try {

@@ -38,9 +38,9 @@ class CurrencyDocument
     /**
      * @var \DateTime
      *
-     * @ES\Property(type="date", options={"format":"yyyy-MM-dd"})
+     * @ES\Property(type="date", options={"format":"strict_date"})
      */
-    private $creationDate;
+    private $date;
 
     /**
      * CurrencyDocument constructor.
@@ -49,7 +49,7 @@ class CurrencyDocument
     {
         $this->rates = new Collection();
         $this->createdAt = new \DateTime();
-        $this->creationDate = date('Y-m-d');
+        $this->date = date('Y-m-d');
     }
 
     /**
@@ -95,16 +95,16 @@ class CurrencyDocument
     /**
      * @return \DateTime
      */
-    public function getCreationDate()
+    public function getDate()
     {
-        return $this->creationDate;
+        return $this->date;
     }
 
     /**
-     * @param \DateTime $creationDate
+     * @param string $date
      */
-    public function setCreationDate($creationDate)
+    public function setDate($date)
     {
-        $this->creationDate = $creationDate;
+        $this->date = $date;
     }
 }
