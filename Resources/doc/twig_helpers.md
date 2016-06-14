@@ -88,3 +88,21 @@ array will be passed to it. Here is the list of available keys:
 - `default` - TRUE if this currency is default, FALSE otherwise.
     
 [1]: http://en.wikipedia.org/wiki/ISO_4217
+
+### Getting prices with past currency rates
+
+Both `ongr_price_list` and `ongr_price` support retrieval of the prices with currency rates of the past.
+In order to do this, it should be first ensured that the currency rates of the wanted date exist in
+elasticsearch, otherwise an exception will be thrown. If the rates exist, however, one additional parameter
+can be passed to each of the filters:
+
+```twig
+
+Formatted price from 2016 04 13: {{ 1000|ongr_price(2, "USD", "EUR", "%s dollars.", "2016-04-13") }}
+
+Formatted price list from 2016 04 13: {{ 1000|ongr_price_list('', null, "2016-04-13") }}
+
+```
+
+In the example above the price will be formatted according to 2016 04 13 currency rates. Lastly, it is important
+to use the date format as shown above.
