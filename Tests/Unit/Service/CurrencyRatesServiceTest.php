@@ -72,7 +72,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
                     'name' => 'USD',
                     'value' => 1.12
                 ]
-            ]
+            ],
+            'created_at' => '2016-05-12T09:08:02+0300'
         ]
     ];
 
@@ -101,6 +102,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
                 'value' => $rate,
             ];
         }
+        $ratesFixture = $this->ratesFixture;
+        $this->ratesFixture = [$this->getCurrentDate() => $ratesFixture];
 
         $searchMock = $this->getMock('ONGR\ElasticsearchDSL\Search');
 
@@ -121,6 +124,17 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->esManagerMock->expects($this->any())->method('getRepository')->willReturn($this->repositoryMock);
         $this->esManagerMock->expects($this->any())->method('createSearch')->willReturn($searchMock);
+    }
+
+    /**
+     * Returns formatted current date
+     *
+     * @returns string
+     */
+    private function getCurrentDate()
+    {
+        $now = new \DateTime();
+        return $now->format('Y-m-d');
     }
 
     /**
@@ -199,10 +213,10 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyRatesService($loader, $this->esManagerMock, $pool);
         $service->setLogger($this->getLogger());
 
-        $this->assertEquals($this->ratesFixture, $service->getRates());
+        $this->assertEquals($this->ratesFixture[$this->getCurrentDate()], $service->getRates());
 
         // Test local cache.
-        $this->assertEquals($this->ratesFixture, $service->getRates());
+        $this->assertEquals($this->ratesFixture[$this->getCurrentDate()], $service->getRates());
     }
 
     /**
@@ -214,19 +228,19 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $pool = $this->getCachePool();
         $item = $this->getCacheItem(null);
-        $item->expects($this->once())->method('set')->with($this->ratesFixture);
+        $item->expects($this->once())->method('set');
         $pool->expects($this->any())->method('getItem')->with('ongr_currency')->will(
             $this->returnValue($item)
         );
-        $loader = $this->getDriverMock('EUR', $this->ratesFixture);
+        $loader = $this->getDriverMock('EUR', $this->ratesFixture[$this->getCurrentDate()]);
 
         $service = new CurrencyRatesService($loader, $this->esManagerMock, $pool);
         $service->setLogger($this->getLogger());
 
-        $this->assertEquals($this->ratesFixture, $service->getRates());
+        $this->assertEquals($this->ratesFixture[$this->getCurrentDate()], $service->getRates());
 
         // Test local cache.
-        $this->assertEquals($this->ratesFixture, $service->getRates());
+        $this->assertEquals($this->ratesFixture[$this->getCurrentDate()], $service->getRates());
     }
 
     /**
@@ -238,7 +252,7 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $pool = $this->getMock('Stash\Interfaces\PoolInterface');
         $item = $this->getCacheItem(null);
-        $item->expects($this->once())->method('set')->with($this->rates);
+        $item->expects($this->once())->method('set');
         $pool->expects($this->any())->method('getItem')->with('ongr_currency')->will(
             $this->returnValue($item)
         );

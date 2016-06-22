@@ -169,6 +169,22 @@ class PriceExtensionTest extends WebTestCase
             'ONGRCurrencyExchangeBundle::currency_list.html.twig',
             'ONGRCurrencyExchangeBundle::price_list.html.twig'
         ];
+        // Case 7: converting to USD with a past date.
+        $out[] = [
+            '$ 1.334,50',
+            1000,
+            '',
+            ',',
+            '.',
+            2,
+            // Value toCurrency.
+            'USD',
+            null,
+            null,
+            'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+            'ONGRCurrencyExchangeBundle::price_list.html.twig',
+            '2016-05-10'
+        ];
 
         return $out;
     }
@@ -187,6 +203,7 @@ class PriceExtensionTest extends WebTestCase
      * @param string $customFormat
      * @param string $currency_list
      * @param string $price_list
+     * @param string $date
      *
      * @dataProvider testGetFormattedPriceData()
      */
@@ -201,7 +218,8 @@ class PriceExtensionTest extends WebTestCase
         $fromCurrency,
         $customFormat,
         $currency_list,
-        $price_list
+        $price_list,
+        $date = ''
     ) {
         $rates = [
             'EUR' => '1',
@@ -231,7 +249,7 @@ class PriceExtensionTest extends WebTestCase
 
         $this->assertEquals(
             $expected,
-            $extension->getFormattedPrice($price, $decimalPlaces, $toCurrency, $fromCurrency, $customFormat)
+            $extension->getFormattedPrice($price, $decimalPlaces, $toCurrency, $fromCurrency, $customFormat, $date)
         );
     }
 
