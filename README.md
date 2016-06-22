@@ -5,6 +5,9 @@ This bundle provides an easy way to display price in multiple currencies. It
 gives a solution to fetch and store current currency rates, to convert prices
 and display them in Twig templates.
 
+If you need any help, [stack overflow](http://http://stackoverflow.com/questions/tagged/ongr)
+is the preffered and recommended way to ask ONGR support questions.
+
 [![Stable Release](https://poser.pugx.org/ongr/currency-exchange-bundle/v/stable.svg)](https://packagist.org/packages/ongr/currency-exchange-bundle)
 [![Build Status](https://travis-ci.org/ongr-io/CurrencyExchangeBundle.svg?branch=master)](https://travis-ci.org/ongr-io/CurrencyExchangeBundle)
 [![Coverage Status](https://coveralls.io/repos/github/ongr-io/CurrencyExchangeBundle/badge.svg?branch=master)](https://coveralls.io/github/ongr-io/CurrencyExchangeBundle?branch=master)
