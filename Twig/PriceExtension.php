@@ -105,7 +105,6 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $this->toListMap = $toListMap;
         $this->currency_list = $currency_list;
         $this->price_list = $price_list;
-
     }
 
     /**
