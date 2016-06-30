@@ -39,14 +39,14 @@ class CurrencyExchangeService
     }
 
     /**
-     * @param string $currency
-     * @param string $date
+     * @param string      $currency
+     * @param string|null $date
      *
      * @throws UndefinedCurrencyException
      *
      * @return float
      */
-    public function getCurrencyRate($currency, $date = '')
+    public function getCurrencyRate($currency, $date = null)
     {
         $rates = $this->rates->getRates($date);
 
@@ -68,14 +68,14 @@ class CurrencyExchangeService
     /**
      * This function calculate rates.
      *
-     * @param float|int $amount
-     * @param string    $toCurrency
-     * @param null      $fromCurrency
-     * @param string    $date
+     * @param float|int      $amount
+     * @param string         $toCurrency
+     * @param null           $fromCurrency
+     * @param string|null    $date
      *
      * @return float
      */
-    public function calculateRate($amount, $toCurrency, $fromCurrency = null, $date = '')
+    public function calculateRate($amount, $toCurrency, $fromCurrency = null, $date = null)
     {
         if (!isset($fromCurrency)) {
             $fromCurrency = $this->defaultCurrency;

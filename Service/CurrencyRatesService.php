@@ -72,14 +72,14 @@ class CurrencyRatesService
     /**
      * This method returns exchange rates.
      *
-     * @param string $date
+     * @param string|null $date
      *
      * @throws RatesNotLoadedException
      * @return array
      */
-    public function getRates($date = '')
+    public function getRates($date = null)
     {
-        $date = $date == '' ? $this->getCurrentDate() : $date;
+        $date = $date ? $date : $this->getCurrentDate();
 
         if (isset($this->rates[$date])) {
             return $this->rates[$date];
@@ -112,13 +112,13 @@ class CurrencyRatesService
     /**
      * Returns currency rates from ES.
      *
-     * @param string $date
+     * @param string|null $date
      *
      * @return array
      */
-    private function getRatesFromBackup($date = '')
+    private function getRatesFromBackup($date = null)
     {
-        $date = $date == '' ? $this->getCurrentDate() : $date;
+        $date = $date ? $date : $this->getCurrentDate();
         $rates = [];
         $currency = $this->getCurrencyFromEs($date);
 
