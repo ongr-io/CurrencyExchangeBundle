@@ -39,15 +39,16 @@ class CurrencyExchangeService
     }
 
     /**
-     * @param string $currency
+     * @param string      $currency
+     * @param string|null $date
      *
      * @throws UndefinedCurrencyException
      *
      * @return float
      */
-    public function getCurrencyRate($currency)
+    public function getCurrencyRate($currency, $date = null)
     {
-        $rates = $this->rates->getRates();
+        $rates = $this->rates->getRates($date);
 
         if (isset($rates[$currency])) {
             return $rates[$currency];
@@ -67,26 +68,27 @@ class CurrencyExchangeService
     /**
      * This function calculate rates.
      *
-     * @param float|int $amount
-     * @param string    $toCurrency
-     * @param null      $fromCurrency
+     * @param float|int      $amount
+     * @param string         $toCurrency
+     * @param null           $fromCurrency
+     * @param string|null    $date
      *
      * @return float
      */
-    public function calculateRate($amount, $toCurrency, $fromCurrency = null)
+    public function calculateRate($amount, $toCurrency, $fromCurrency = null, $date = null)
     {
         if (!isset($fromCurrency)) {
             $fromCurrency = $this->defaultCurrency;
         }
 
         if ($this->rates->getBaseCurrency() != $fromCurrency) {
-            $amount = $amount / $this->getCurrencyRate($fromCurrency);
+            $amount = $amount / $this->getCurrencyRate($fromCurrency, $date);
         }
 
         if ($toCurrency == $this->rates->getBaseCurrency()) {
             return $amount;
         }
 
-        return $amount * $this->getCurrencyRate($toCurrency);
+        return $amount * $this->getCurrencyRate($toCurrency, $date);
     }
 }

@@ -18,11 +18,14 @@ use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchBundle\Result\Result;
 use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
+use ONGR\ElasticsearchDSL\Query\MatchQuery;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchBundle\Service\Manager;
 use Psr\Log\LoggerAwareTrait;
 use Stash\Interfaces\ItemInterface;
 use Stash\Interfaces\PoolInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * This class provides currency rates.
@@ -69,63 +72,64 @@ class CurrencyRatesService
     /**
      * This method returns exchange rates.
      *
+     * @param string|null $date
+     *
      * @throws RatesNotLoadedException
      * @return array
      */
-    public function getRates()
+    public function getRates($date = null)
     {
-        if (isset($this->rates)) {
-            return $this->rates;
+        $date = $date ? $date : $this->getCurrentDate();
+
+        if (isset($this->rates[$date])) {
+            return $this->rates[$date];
         }
 
         $item = $this->getCachedRates();
         $this->rates = $item->get();
-        if (isset($this->rates)) {
-            return $this->rates;
+        if (isset($this->rates[$date])) {
+            return $this->rates[$date];
         }
 
-        $this->rates = $this->getRatesFromBackup();
-        if (isset($this->rates)) {
-            return $this->rates;
+        $this->rates = $this->getRatesFromBackup($date);
+        if (isset($this->rates[$date])) {
+            return $this->rates[$date];
+        } elseif ($date != $this->getCurrentDate()) {
+            throw new RatesNotLoadedException(
+                'Currency rates for '.$date.' are not loaded and could not be loaded on demand'
+            );
         }
 
-        $this->rates = $this->reloadRates();
-        if (isset($this->rates)) {
-            return $this->rates;
+        $this->reloadRates();
+        if (isset($this->rates[$date])) {
+            return $this->rates[$date];
         }
-        throw new RatesNotLoadedException('Currency rates are not loaded and could not be loaded on demand');
+        throw new RatesNotLoadedException(
+            'Currency rates for '.$date.' are not loaded and could not be loaded on demand'
+        );
     }
 
     /**
      * Returns currency rates from ES.
      *
+     * @param string|null $date
+     *
      * @return array
      */
-    private function getRatesFromBackup()
+    private function getRatesFromBackup($date = null)
     {
+        $date = $date ? $date : $this->getCurrentDate();
         $rates = [];
-        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
-        $search = $repository->createSearch();
-        $search->addSort(new FieldSort('created_at', FieldSort::DESC));
-        $query = new MatchAllQuery();
-        $search->addQuery($query);
-        $search->setSize(1);
-        try {
-            $results = $repository->execute($search, Result::RESULTS_ARRAY);
-        } catch (Missing404Exception $e) {
-            $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
+        $currency = $this->getCurrencyFromEs($date);
 
-            return null;
-        }
-
-        if (count($results)) {
-            foreach ($results[0]['rates'] as $data) {
+        if (!empty($currency)) {
+            foreach ($currency['rates'] as $data) {
                 $rates[$data['name']] = $data['value'];
             }
             $this->logger && $this->logger->notice('Rates returned from ES. Cache updated.');
-            $this->updateRatesCache($rates);
+            $this->updateRatesCache($rates, new \DateTime($currency['created_at']));
 
-            return $rates;
+            return [$date => $rates];
         }
 
         return null;
@@ -134,11 +138,16 @@ class CurrencyRatesService
     /**
      * Update rates in cache.
      *
-     * @param array $rates
+     * @param array     $rates
+     * @param \DateTime $createdAt
      */
-    private function updateRatesCache($rates)
+    private function updateRatesCache($rates, \DateTime $createdAt = null)
     {
-        $this->getCachedRates()->set($rates);
+        $createdAt = $createdAt ? $createdAt : new \DateTime();
+        $cache = [
+            $createdAt->format('Y-m-d') => $rates
+        ];
+        $this->getCachedRates()->set($cache);
     }
 
     /**
@@ -156,13 +165,29 @@ class CurrencyRatesService
      */
     public function reloadRates()
     {
-        $this->rates = $this->driver->getRates();
+        $date = $this->getCurrentDate();
+
+        $esCurrency = $this->getCurrencyFromEs($date);
+        if (!empty($esCurrency)) {
+            $this->rates = [
+                $date => $esCurrency['rates']
+            ];
+            return $this->rates;
+        }
+
+        $rates = $this->driver->getRates();
+
+        if ($rates) {
+            $this->rates = [
+                $date => $rates
+            ];
+        }
 
         /** @var CurrencyDocument $document */
         $document = new CurrencyDocument();
         
-        if ($this->rates) {
-            foreach ($this->rates as $name => $value) {
+        if ($this->rates[$date]) {
+            foreach ($this->rates[$date] as $name => $value) {
                 $ratesObject = new RatesObject();
                 $ratesObject->setName($name);
                 $ratesObject->setValue($value);
@@ -170,7 +195,7 @@ class CurrencyRatesService
             }
             $this->manager->persist($document);
             $this->manager->commit();
-            $this->updateRatesCache($this->rates);
+            $this->updateRatesCache($this->rates, $document->getCreatedAt());
 
             return $this->rates;
         }
@@ -187,5 +212,42 @@ class CurrencyRatesService
     public function getBaseCurrency()
     {
         return $this->driver->getBaseCurrency();
+    }
+
+    /**
+     * Returns formatted current date
+     *
+     * @returns string
+     */
+    private function getCurrentDate()
+    {
+        $now = new \DateTime();
+        return $now->format('Y-m-d');
+    }
+
+    /**
+     * Returns an array representing a currency for a specific date from ES
+     *
+     * @param string $date
+     *
+     * @returns array
+     */
+    private function getCurrencyFromEs($date)
+    {
+        $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
+        $search = $repository->createSearch();
+        $search->addQuery(
+            new MatchQuery('date', $date)
+        );
+        $search->setSize(1);
+        try {
+            $results = $repository->execute($search, Result::RESULTS_ARRAY);
+        } catch (Missing404Exception $e) {
+            $this->logger && $this->logger->notice('Failed to execute query. Please check ES configuration');
+
+            return null;
+        }
+
+        return count($results) > 0 ? $results[0] : [];
     }
 }

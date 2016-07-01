@@ -105,7 +105,6 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $this->toListMap = $toListMap;
         $this->currency_list = $currency_list;
         $this->price_list = $price_list;
-
     }
 
     /**
@@ -158,6 +157,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      * @param string $toCurrency
      * @param string $fromCurrency
      * @param string $customFormat
+     * @param string $date
      *
      * @return string
      */
@@ -166,14 +166,15 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $decimals = 0,
         $toCurrency = null,
         $fromCurrency = null,
-        $customFormat = null
+        $customFormat = null,
+        $date = ''
     ) {
         $targetCurrency = $toCurrency ? $toCurrency : $this->currency;
 
         if ($targetCurrency) {
             if (isset($this->currencyService)) {
                 try {
-                    $price = $this->currencyService->calculateRate($price, $targetCurrency, $fromCurrency);
+                    $price = $this->currencyService->calculateRate($price, $targetCurrency, $fromCurrency, $date);
                 } catch (UndefinedCurrencyException $ex) {
                     $this->logger && $this->logger->error(
                         'Got undefined currency on PriceExtension',
@@ -216,6 +217,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      * @param int               $price
      * @param string            $template
      * @param null              $fromCurrency
+     * @param string            $date
      *
      * @return string
      */
@@ -223,7 +225,8 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $environment,
         $price,
         $template = '',
-        $fromCurrency = null
+        $fromCurrency = null,
+        $date = ''
     ) {
         if ($template == '') {
             $template = $this->price_list;
@@ -231,7 +234,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $values = [];
         foreach ($this->toListMap as $targetCurrency) {
             $values[] = [
-                'value' => $this->getFormattedPrice($price, 0, $targetCurrency, $fromCurrency),
+                'value' => $this->getFormattedPrice($price, 0, $targetCurrency, $fromCurrency, '', $date),
                 'currency' => strtolower($targetCurrency),
             ];
         }
