@@ -167,7 +167,7 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
         $toCurrency = null,
         $fromCurrency = null,
         $customFormat = null,
-        $date = ''
+        $date = null
     ) {
         $targetCurrency = $toCurrency ? $toCurrency : $this->currency;
 
@@ -224,11 +224,11 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
     public function getPriceList(
         $environment,
         $price,
-        $template = '',
+        $template = null,
         $fromCurrency = null,
-        $date = ''
+        $date = null
     ) {
-        if ($template == '') {
+        if (!$template) {
             $template = $this->price_list;
         }
         $values = [];
@@ -253,9 +253,9 @@ class PriceExtension extends \Twig_Extension implements LoggerAwareInterface
      *
      * @return string
      */
-    public function getCurrencyList($environment, $template = '')
+    public function getCurrencyList($environment, $template = null)
     {
-        if ($template == '') {
+        if (!$template) {
             $template = $this->currency_list;
         }
         $values = [];
