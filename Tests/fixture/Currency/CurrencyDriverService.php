@@ -21,8 +21,12 @@ class CurrencyDriverService implements CurrencyDriverInterface
     /**
      * {@inheritdoc}
      */
-    public function getRates()
+    public function getRates($date = null)
     {
+        if ($date) {
+            throw new \UnexpectedValueException('ECB driver does not support currency history at the moment.');
+        }
+        
         return [
             'EUR' => 1,
             'USD' => 1.3345,

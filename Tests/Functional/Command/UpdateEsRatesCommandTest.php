@@ -110,14 +110,11 @@ class UpdateEsRatesCommandTest extends AbstractElasticsearchTestCase
             $client,
             'http://openexchangerates.org/api/latest.json'
         );
-        $item = $this->getMock('Stash\Interfaces\ItemInterface');
-        $item->expects($this->any())->method('set');
-        $pool = $this->getMock('Stash\Interfaces\PoolInterface');
-        $pool->expects($this->any())->method('getItem')->with('ongr_currency')->willReturn($item);
+
         $currencyRateService = new CurrencyRatesService(
             $driver,
             $this->getManager(),
-            $pool
+            $this->getMock('Doctrine\Common\Cache\CacheProvider')
         );
         $this->getContainer()->set('ongr_currency_exchange.currency_rates_service', $currencyRateService);
     }

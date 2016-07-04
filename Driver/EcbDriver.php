@@ -59,8 +59,12 @@ class EcbDriver implements CurrencyDriverInterface
     /**
      * {@inheritdoc}
      */
-    public function getRates()
+    public function getRates($date = null)
     {
+        if ($date) {
+            throw new \UnexpectedValueException('ECB driver does not support currency history at the moment.');
+        }
+
         $rates = [];
         $response = $this->getRawData();
 

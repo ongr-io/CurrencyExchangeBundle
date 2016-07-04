@@ -1,25 +1,13 @@
-imports:
-    - { resource: parameters_test.yml }
-
 # Framework Configuration
 framework:
-    esi:             ~
-    fragments:       { path: /_proxy }
-    translator:      { fallback: "%locale%" }
-    secret:          %secret%
+    secret: 'secret'
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: ~
         strict_requirements: %kernel.debug%
-    form:            true
-    csrf_protection: true
-    validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        #assets_version: 201204261
-    default_locale:  "%locale%"
-    trusted_proxies: ~
-    session:         ~
     test: ~
+
 
 monolog:
     handlers:
@@ -33,31 +21,19 @@ ongr_elasticsearch:
         default:
             hosts:
                 - 127.0.0.1:9200
-            index_name: ongr
+            index_name: ongr_currency_test
             settings:
                 refresh_interval: -1
-                number_of_replicas: 1
+                number_of_replicas: 0
     managers:
         default:
             connection: default
             mappings:
                 - ONGRCurrencyExchangeBundle
 
-stash:
-    caches:
-        files:
-            drivers: [ FileSystem ]
-            FileSystem:
-                dirSplit:               2
-                path:                   %kernel.cache_dir%/stash
-                filePermissions:        0660
-                dirPermissions:         0770
-                memKeyLimit:            20
-
 ongr_currency_exchange:
     es_manager: default
     default_currency: EUR
-    cache: stash.files_cache
     separators:
         decimal: ','
         thousands: '.'
@@ -70,8 +46,3 @@ ongr_currency_exchange:
 services:
     custom_exchange_driver_service:
         class: ONGR\CurrencyExchangeBundle\Tests\fixture\Currency\CurrencyDriverService
-
-    foo_settings_provider:
-        class: ONGR\CurrencyExchangeBundle\Tests\FooSettingsProvider
-        tags:
-            - { name: ongr_currency_exchange.settings_provider, method: getFooSets } # method attribute is optional

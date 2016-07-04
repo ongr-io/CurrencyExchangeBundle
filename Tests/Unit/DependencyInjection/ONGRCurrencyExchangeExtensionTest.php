@@ -29,11 +29,9 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder();
         $container->setDefinition('ongr_currency_exchange.twig.price_extension', new Definition());
-        $container->setDefinition('stash.memcache', new Definition());
         $container->setDefinition('my_service', new Definition());
 
         $config = [
-            'cache' => 'stash.memcache',
             'driver' => 'ongr_currency_exchange.ecb_driver',
         ];
         // Case #0 we need currency rates service.
@@ -69,9 +67,7 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
     public function testDefaultCurrency()
     {
         $config = [
-            'ongr_currency_exchange' => [
-                'cache' => 'stash.files_cache',
-            ],
+            'ongr_currency_exchange' => [],
         ];
         $extension = new ONGRCurrencyExchangeExtension();
         $container = new ContainerBuilder();
@@ -91,7 +87,6 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $config = [
             'ongr_currency_exchange' => [
-                'cache' => 'stash.files_cache',
                 'driver' => 'ongr_currency_exchange.open_exchange_driver',
             ],
         ];

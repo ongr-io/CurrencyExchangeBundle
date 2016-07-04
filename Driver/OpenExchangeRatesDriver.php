@@ -77,7 +77,7 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     /**
      * {@inheritdoc}
      */
-    public function getRates()
+    public function getRates($date = null)
     {
         $response = $this->getRawData();
 
