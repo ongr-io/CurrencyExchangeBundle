@@ -31,16 +31,16 @@ class CurrencyDocument
     /**
      * @var \DateTime
      *
-     * @ES\Property(type="date")
+     * @ES\Property(type="date", options={"format":"strict_date"})
      */
-    private $createdAt;
+    private $date;
 
     /**
      * @var \DateTime
      *
-     * @ES\Property(type="date", options={"format":"strict_date"})
+     * @ES\Property(type="date")
      */
-    private $date;
+    private $createdAt;
 
     /**
      * CurrencyDocument constructor.
@@ -48,12 +48,12 @@ class CurrencyDocument
     public function __construct()
     {
         $this->rates = new Collection();
-        $this->createdAt = new \DateTime();
         $this->date = date('Y-m-d');
+        $this->createdAt = new \DateTime();
     }
 
     /**
-     * @return RatesObject
+     * @return Collection
      */
     public function getRates()
     {
@@ -61,7 +61,7 @@ class CurrencyDocument
     }
 
     /**
-     * @param RatesObject $rates
+     * @param Collection $rates
      */
     public function setRates($rates)
     {
@@ -69,11 +69,27 @@ class CurrencyDocument
     }
 
     /**
-     * @param RatesObject $rate
+     * @param RatesObject|array $rate
      */
     public function addRate($rate)
     {
         $this->rates[] = $rate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 
     /**
@@ -90,21 +106,5 @@ class CurrencyDocument
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param string $date
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
     }
 }
