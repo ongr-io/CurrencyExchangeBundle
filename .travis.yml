@@ -15,6 +15,9 @@ services:
   - elasticsearch
 install:
   - composer require --no-update symfony/symfony:${SYMFONY}
+  - wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.3.3.tar.gz
+  - tar -xzf elasticsearch-2.3.3.tar.gz
+  - ./elasticsearch-2.3.3/bin/elasticsearch > /dev/null 2>&1 &
 before_script:
   - composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH
   - composer install --no-interaction --prefer-dist
@@ -23,9 +26,3 @@ script:
   - vendor/bin/phpcs -p --standard=PSR2 --ignore=vendor/,Tests/app/,Resources/public/ ./
 after_script:
   - vendor/bin/coveralls
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/81e47479feba5ba8dc47
-    on_success: change
-    on_start: never
