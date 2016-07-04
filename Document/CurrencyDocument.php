@@ -31,7 +31,7 @@ class CurrencyDocument
     /**
      * @var \DateTime
      *
-     * @ES\Property(type="date", options={"format":"strict_date"})
+     * @ES\Property(type="date", options={"format":"date||yyyy-MM-dd"})
      */
     private $date;
 
