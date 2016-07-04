@@ -44,7 +44,6 @@ class AppKernel extends Kernel
         return [
             // ...
             new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
-            new Tedivm\StashBundle\TedivmStashBundle(),          
             new ONGR\CurrencyExchangeBundle\ONGRCurrencyExchangeBundle(),    
         ];
     }
@@ -52,9 +51,6 @@ class AppKernel extends Kernel
     // ...
 }
 ```
-
-> __Note:__ This bundle uses [TedivmStashBundle][5] for saving currencies into
-the cache and [ONGRElasticsearchBundle][4] for currencies backup.
        
 ### Step 3: Update Elasticsearch Mapping  
 
@@ -73,29 +69,8 @@ ongr_elasticsearch:
                 - AppBundle
                 - ONGRCurrencyExchangeBundle
 ```
-
-### Step 4: Configure Cache Layer
-
-Add configuration for `TedivmStashBundle`. To get started quickly you can use
-filesystem driver here: 
-
-```yml
-# app/config/config.yml
-stash:
-    caches:
-        files:
-            drivers: [ FileSystem ]
-            FileSystem:
-                dirSplit:        2
-                path:            %kernel.cache_dir%/stash
-                filePermissions: 0660
-                dirPermissions:  0770
-                memKeyLimit:     20
-```
-
-> See TedivmStashBundle [documentation][5] for full configuration reference. 
   
-### Step 5: Configure the Bundle
+### Step 4: Configure the Bundle
 
 Configure the currencies you need in `config.yml` file.
 
@@ -104,7 +79,6 @@ Configure the currencies you need in `config.yml` file.
 ongr_currency_exchange:
     es_manager: default
     default_currency: EUR
-    cache: stash.files_cache
     separators:
         decimal: ','
         thousands: '.'
