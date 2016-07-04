@@ -22,10 +22,13 @@ interface CurrencyDriverInterface
      * Returns array of currency rates.
      *
      * For example: <code>['USD' => 1, 'EUR' => '1.678']</code>.
+     * To get currency rate from the past simply use $date in '2014-05-21' format for specific date.
+     *
+     * @param string $date
      *
      * @return array
      */
-    public function getRates();
+    public function getRates($date = null);
 
     /**
      * Returns base currency code.
