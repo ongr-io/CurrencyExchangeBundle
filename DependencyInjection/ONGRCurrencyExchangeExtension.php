@@ -67,7 +67,7 @@ class ONGRCurrencyExchangeExtension extends Extension
                 [
                     new Reference($driver),
                     new Reference(sprintf('es.manager.%s', $config['es_manager'])),
-                    new Reference($config['cache']),
+                    new Reference('ong_currency.cache_provider'),
                 ]
             );
             $def->addMethodCall('setLogger', [new Reference('logger')]);

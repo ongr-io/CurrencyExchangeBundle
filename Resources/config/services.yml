@@ -43,3 +43,7 @@ services:
         arguments:
           - "@guzzle.client"
           - %ongr_currency_exchange.ecb_driver.url%
+
+    ong_currency.cache_provider:
+        class: Doctrine\Common\Cache\PhpFileCache
+        arguments: ["%kernel.cache_dir%/ongr/currency", ".ongr.currency_cache.php"]
