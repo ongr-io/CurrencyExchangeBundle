@@ -1,9 +1,13 @@
 # Framework Configuration
 framework:
-    secret: "SUPER-TOP-SECRET"
-    test: ~
+    secret: 'secret'
+    router:
+        resource: ~
+        strict_requirements: %kernel.debug%
     templating:
         engines: ['twig']
+    test: ~
+
 
 monolog:
     handlers:
