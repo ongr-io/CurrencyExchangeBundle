@@ -13,6 +13,7 @@ namespace ONGR\CurrencyExchangeBundle\Tests\Unit\Document;
 
 use ONGR\CurrencyExchangeBundle\Document\CurrencyDocument;
 use ONGR\CurrencyExchangeBundle\Document\RatesObject;
+use ONGR\ElasticsearchBundle\Collection\Collection;
 
 class CurrencyDocumentTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,10 +23,15 @@ class CurrencyDocumentTest extends \PHPUnit_Framework_TestCase
     public function testGettersAndSetters()
     {
         $time = time();
-        $rates = new RatesObject();
+        $rate = new RatesObject();
+        $rate->setName('foo');
+        $rates = new Collection([$rate]);
+        $rate->setName('bar');
         $currency = new CurrencyDocument();
         $currency->setCreatedAt($time);
         $currency->setRates($rates);
+        $currency->addRate($rate);
+        $rates[] = $rate;
         $this->assertEquals($time, $currency->getCreatedAt());
         $this->assertEquals($rates, $currency->getRates());
     }
