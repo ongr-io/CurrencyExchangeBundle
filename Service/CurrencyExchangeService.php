@@ -11,6 +11,7 @@
 
 namespace ONGR\CurrencyExchangeBundle\Service;
 
+use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\CurrencyExchangeBundle\Exception\UndefinedCurrencyException;
 
 /**
@@ -58,11 +59,14 @@ class CurrencyExchangeService
     }
 
     /**
-     * @return array|null
+     * @param string|null $date
+     *
+     * @return array
+     * @throws RatesNotLoadedException
      */
-    public function getCurrencies()
+    public function getCurrencies($date)
     {
-        return $this->rates->getRates();
+        return $this->rates->getRates($date);
     }
 
     /**
