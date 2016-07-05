@@ -115,4 +115,19 @@ class EcbDriverTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($driver->getBaseCurrency(), 'EUR');
     }
+
+    /**
+     * Tests if an exception is thrown if a date is provided
+     *
+     * @expectedException \UnexpectedValueException
+     * @@expectedExceptionMessage ECB driver does not support currency history at the moment.
+     */
+    public function testGetRatesWithSpecifiedDateException()
+    {
+        $driver = new EcbDriver(
+            new Client(),
+            'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
+        );
+        $driver->getRates('2015-05-30');
+    }
 }

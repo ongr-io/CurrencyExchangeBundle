@@ -94,4 +94,21 @@ class ONGRCurrencyExchangeExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new ONGRCurrencyExchangeExtension();
         $extension->load($config, new ContainerBuilder());
     }
+
+    /**
+     * Test if exception is thrown if there is no definition of the driver in the container
+     *
+     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     */
+    public function testDriverNotFoundException()
+    {
+        $config = [
+            'ongr_currency_exchange' => [
+                'driver' => 'non_existing_driver',
+            ],
+        ];
+
+        $extension = new ONGRCurrencyExchangeExtension();
+        $extension->load($config, new ContainerBuilder());
+    }
 }

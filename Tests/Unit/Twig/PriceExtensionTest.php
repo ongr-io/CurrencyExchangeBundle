@@ -659,12 +659,18 @@ class PriceExtensionTest extends WebTestCase
                 ],
             ],
         ];
-        $env = $this->getMock('stdClass', ['render']);
-        $env->expects($this->once())->method('render')->with(
-            'testTemplate',
-            $expectedParams
+
+        $extension->getCurrencyList(
+            $this->getTwigEnvironmentMock('testTemplate', $expectedParams),
+            'testTemplate'
         );
-        $extension->getCurrencyList($env, 'testTemplate');
+
+        $extension->getCurrencyList(
+            $this->getTwigEnvironmentMock(
+                'ONGRCurrencyExchangeBundle::currency_list.html.twig',
+                $expectedParams
+            )
+        );
     }
 
     /**
@@ -688,5 +694,21 @@ class PriceExtensionTest extends WebTestCase
         $extension->setLogger($this->getLogger());
 
         $this->assertEquals('', $extension->getFormattedPrice(2, 0, 'a', 'b'));
+    }
+
+    /**
+     * @param string $template
+     * @param array  $expectedParams
+     *
+     * @return \Twig_Environment
+     */
+    private function getTwigEnvironmentMock($template, $expectedParams)
+    {
+        $env = $this->getMock('stdClass', ['render']);
+        $env->expects($this->once())->method('render')->with(
+            $template,
+            $expectedParams
+        );
+        return $env;
     }
 }
