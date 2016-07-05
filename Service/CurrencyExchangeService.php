@@ -58,11 +58,13 @@ class CurrencyExchangeService
     }
 
     /**
+     * @param string $date
+     *
      * @return array|null
      */
-    public function getCurrencies()
+    public function getCurrencies($date = null)
     {
-        return $this->rates->getRates();
+        return $this->rates->getRates($date);
     }
 
     /**
