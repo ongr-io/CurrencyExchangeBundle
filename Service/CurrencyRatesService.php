@@ -38,6 +38,11 @@ class CurrencyRatesService
     private $driver;
 
     /**
+     * @var string
+     */
+    private $baseCurrency;
+
+    /**
      * @var CacheProvider
      */
     private $cache;
@@ -51,15 +56,18 @@ class CurrencyRatesService
      * @param CurrencyDriverInterface $driver  Currency exchange driver.
      * @param Manager                 $manager ES Manager.
      * @param CacheProvider           $cache    Cache pool.
+     * @param string                  $baseCurrency  The base currency of the project.
      */
     public function __construct(
         CurrencyDriverInterface $driver,
         Manager $manager,
-        CacheProvider $cache
+        CacheProvider $cache,
+        $baseCurrency
     ) {
         $this->driver = $driver;
         $this->manager = $manager;
         $this->cache = $cache;
+        $this->baseCurrency = $baseCurrency;
     }
 
     /**
@@ -143,6 +151,10 @@ class CurrencyRatesService
 
         $rawRates = $this->driver->getRates($date);
 
+        if ($this->getBaseCurrency() != $this->getDriverBaseCurrency()) {
+            $rawRates = $this->recalculateRatesFromDriver($rawRates);
+        }
+
         if ($rawRates) {
             $this->rates[$date] = $rawRates;
             $this->cache->save($date, $rawRates);
@@ -174,11 +186,49 @@ class CurrencyRatesService
     }
 
     /**
+     * Recalculates rates to fit the base currency of the project
+     *
+     * @param array $rates
+     *
+     * @returns array
+     */
+    private function recalculateRatesFromDriver($rates)
+    {
+        $newRates = [];
+        $projectBaseCurrency = $this->getBaseCurrency();
+        $driverBaseCurrency = $this->getDriverBaseCurrency();
+
+        foreach ($rates as $currency => $rate) {
+            $newRates[$currency] = $rate / $rates[$projectBaseCurrency];
+        }
+
+        $newRates[$driverBaseCurrency] = 1 / $rates[$projectBaseCurrency];
+
+        return $newRates;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseCurrency()
+    {
+        return $this->baseCurrency;
+    }
+
+    /**
+     * @param string $baseCurrency
+     */
+    public function setBaseCurrency($baseCurrency)
+    {
+        $this->baseCurrency = $baseCurrency;
+    }
+
+    /**
      * Returns actual base currency name.
      *
      * @return string
      */
-    public function getBaseCurrency()
+    public function getDriverBaseCurrency()
     {
         return $this->driver->getBaseCurrency();
     }

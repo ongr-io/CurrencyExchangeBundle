@@ -114,7 +114,8 @@ class UpdateEsRatesCommandTest extends AbstractElasticsearchTestCase
         $currencyRateService = new CurrencyRatesService(
             $driver,
             $this->getManager(),
-            $this->getMock('Doctrine\Common\Cache\CacheProvider')
+            $this->getMock('Doctrine\Common\Cache\CacheProvider'),
+            'EUR'
         );
         $this->getContainer()->set('ongr_currency_exchange.currency_rates_service', $currencyRateService);
     }

@@ -131,7 +131,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR'),
             $this->esManagerMock,
-            $this->cacheMock
+            $this->cacheMock,
+            'EUR'
         );
 
         $this->cacheMock->expects($this->once())->method('fetch')->willReturn($this->ratesFixture);
@@ -153,7 +154,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR', $this->ratesFixture),
             $this->esManagerMock,
-            $this->cacheMock
+            $this->cacheMock,
+            'EUR'
         );
 
         $this->assertEquals($this->ratesFixture, $service->getRates(self::CURRENT_DATE));
@@ -170,7 +172,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR'),
             $this->esManagerMock,
-            $this->cacheMock
+            $this->cacheMock,
+            'EUR'
         );
 
         $this->assertEquals('EUR', $service->getBaseCurrency());
@@ -188,7 +191,8 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR', null),
             $this->esManagerMock,
-            $this->cacheMock
+            $this->cacheMock,
+            'EUR'
         );
 
         $service->getRates();

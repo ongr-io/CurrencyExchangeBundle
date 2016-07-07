@@ -29,6 +29,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expectedConfiguration = [
             'es_manager' => 'default',
             'default_currency' => 'EUR',
+            'base_currency' => 'EUR',
             'currencies' => [],
             'separators' => ['decimal' => ',', 'thousands' => '.'],
             'currency_sign' => '€',

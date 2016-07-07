@@ -94,7 +94,8 @@ class CurrencyRatesServiceTest extends AbstractElasticsearchTestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR', null),
             $this->getManager('default'),
-            $this->getContainer()->get('ong_currency.cache_provider')
+            $this->getContainer()->get('ong_currency.cache_provider'),
+            'EUR'
         );
 
         $rates = $service->getRates(self::CURRENT_DATE);
@@ -108,7 +109,8 @@ class CurrencyRatesServiceTest extends AbstractElasticsearchTestCase
         $service = new CurrencyRatesService(
             $this->getDriverMock('EUR', $this->ratesFixture),
             $this->getManager('default'),
-            $this->getContainer()->get('ong_currency.cache_provider')
+            $this->getContainer()->get('ong_currency.cache_provider'),
+            'EUR'
         );
 
         $date = date('Y-m-d');
