@@ -64,9 +64,9 @@ class CurrencyExchangeService
      * @return array
      * @throws RatesNotLoadedException
      */
-    public function getCurrencies($date)
+    public function getCurrencies($date = null)
     {
-        return $this->rates->getRates($date);
+        return $this->rates->getRates($date = null);
     }
 
     /**

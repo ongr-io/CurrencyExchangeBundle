@@ -2,7 +2,7 @@ parameters:
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
     ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
     ongr_currency_exchange.ecb_driver.url: 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
-    ongr_currency_exchange.open_exchange_driver.url: 'http://openexchangerates.org/api/latest.json'
+    ongr_currency_exchange.open_exchange_driver.url: 'http://openexchangerates.org/api/'
 
 services:
     ongr_currency_exchange.twig.price_extension:

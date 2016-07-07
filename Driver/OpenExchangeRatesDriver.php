@@ -62,12 +62,14 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
     /**
      * Downloads raw currency data.
      *
+     * @param string $endpoint
+     *
      * @return array
      */
-    private function getRawData()
+    private function getRawData($endpoint = 'latest.json')
     {
         $request = $this->httpClient->get(
-            $this->url,
+            $this->url.$endpoint,
             ['query' => ['app_id' => $this->getAppId()]]
         );
 
@@ -79,7 +81,13 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
      */
     public function getRates($date = null)
     {
-        $response = $this->getRawData();
+        if ($date) {
+            $endpoint = sprintf('historical/%s.json', $date);
+        } else {
+            $endpoint = 'latest.json';
+        }
+
+        $response = $this->getRawData($endpoint);
 
         // Validate response.
         $valid = isset($response) && is_array($response) && isset($response['base']) && isset($response['rates']);
