@@ -68,9 +68,10 @@ class OpenExchangeRatesDriver implements CurrencyDriverInterface
      */
     private function getRawData($endpoint = 'latest.json')
     {
-        $request = $this->httpClient->get(
-            $this->url.$endpoint,
-            ['query' => ['app_id' => $this->getAppId()]]
+        $url = $this->url. $endpoint . '?' . http_build_query(['app_id' => $this->getAppId()]);
+        $request = $this->httpClient->request(
+            'GET',
+            $url
         );
 
         return json_decode($request->getBody(), true);

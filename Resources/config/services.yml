@@ -42,7 +42,9 @@ services:
         class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver
         arguments:
           - "@guzzle.client"
-          - %ongr_currency_exchange.ecb_driver.url%
+          - %ongr_currency_exchange.open_exchange_driver.url%
+        calls:
+            - [setAppId, ["%ongr_currency_exchange.ecb_driver.api_id%"]]
 
     ong_currency.cache_provider:
         class: Doctrine\Common\Cache\PhpFileCache
