@@ -52,14 +52,19 @@ class ONGRCurrencyExchangeExtension extends Extension
     private function configCurrencyRatesService(array $config, ContainerBuilder $container)
     {
         $driver = $config['driver'];
-        $ecbApiId = $config['open_exchange_rates_api_id'];
+        $oerApiId = $config['open_exchange_rates_api_id'];
 
-        if ($driver == 'ongr_currency_exchange.open_exchange_driver' && !$ecbApiId) {
+        if ($driver == 'ongr_currency_exchange.open_exchange_driver' && !$oerApiId) {
             throw new InvalidConfigurationException(
                 '"open_exchange_rates_api_id" must be set when using ' .
                 '"ongr_currency_exchange.open_exchange_driver" driver.'
             );
         }
+
+        $container->setParameter(
+            'ongr_currency_exchange.ecb_driver.api_id',
+            $config['open_exchange_rates_api_id']
+        );
 
         if ($container->hasDefinition($driver)) {
             $def = new Definition(
