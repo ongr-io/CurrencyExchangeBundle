@@ -197,4 +197,28 @@ class CurrencyRatesServiceTest extends \PHPUnit_Framework_TestCase
 
         $service->getRates();
     }
+
+    public function testRecalculateRatesFromDriver()
+    {
+        $service = new CurrencyRatesService(
+            $this->getDriverMock('EUR', $this->ratesFixture),
+            $this->esManagerMock,
+            $this->cacheMock,
+            'USD'
+        );
+
+        $rates = $service->reloadRates();
+
+        $this->assertEquals(
+            $this->ratesFixture['LTL'] / $this->ratesFixture['USD'],
+            $rates['LTL']
+        );
+
+        $this->assertEquals(
+            $this->ratesFixture['EGP'] / $this->ratesFixture['USD'],
+            $rates['EGP']
+        );
+
+        $this->assertEquals(1, $rates['USD']);
+    }
 }
