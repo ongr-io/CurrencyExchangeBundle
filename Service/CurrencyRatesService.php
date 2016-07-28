@@ -18,6 +18,7 @@ use ONGR\CurrencyExchangeBundle\Driver\CurrencyDriverInterface;
 use ONGR\CurrencyExchangeBundle\Exception\RatesNotLoadedException;
 use ONGR\ElasticsearchBundle\Collection\Collection;
 use ONGR\ElasticsearchBundle\Service\Manager;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Psr\Log\LoggerAwareTrait;
 
 /**
@@ -124,7 +125,7 @@ class CurrencyRatesService
         #TODO Should be used service instead of getRepository
         $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
         /** @var CurrencyDocument $currency */
-        $currency = $repository->findOneBy(['date' => $date]);
+        $currency = $repository->findOneBy(['date' => $date], ['created_at' => FieldSort::DESC]);
 
         if ($currency) {
             /** @var RatesObject $rate */
