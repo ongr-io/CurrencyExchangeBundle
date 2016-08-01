@@ -160,27 +160,25 @@ class CurrencyRatesService
             $this->rates[$date] = $rawRates;
             $this->cache->save($date, $rawRates);
 
-            $repository = $this->manager->getRepository('ONGRCurrencyExchangeBundle:CurrencyDocument');
-            /** @var CurrencyDocument $currency */
-            $document = $repository->findOneBy(['date' => $date]);
-
-            if (!$document) {
+            $rates = $this->getCurrencyFromEs($date);
+            if (empty($rates)) {
                 $document = new CurrencyDocument();
+                $document->setDate($date);
+
+                $rates = [];
+                foreach ($rawRates as $rate => $value) {
+                    $rateObj = new RatesObject();
+                    $rateObj->setName($rate);
+                    $rateObj->setValue($value);
+                    $rates[] = $rateObj;
+                }
+
+                $document->setRates(new Collection($rates));
+                $this->manager->persist($document);
+                $this->manager->commit();
+
+                return $rawRates;
             }
-
-            $rates = [];
-            foreach ($rawRates as $rate => $value) {
-                $rateObj = new RatesObject();
-                $rateObj->setName($rate);
-                $rateObj->setValue($value);
-                $rates[] = $rateObj;
-            }
-
-            $document->setRates(new Collection($rates));
-            $this->manager->persist($document);
-            $this->manager->commit();
-
-            return $rawRates;
         }
 
         return null;
