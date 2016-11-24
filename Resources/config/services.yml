@@ -1,6 +1,6 @@
 parameters:
     ongr_currency_exchange.twig.price_extension.currency.sign: '€'
-    ongr_currency_exchange.twig.price_extension.currency.name: %ongr_currency_exchange.default_currency%
+    ongr_currency_exchange.twig.price_extension.currency.name: "%ongr_currency_exchange.default_currency%"
     ongr_currency_exchange.ecb_driver.url: 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
     ongr_currency_exchange.open_exchange_driver.url: 'http://openexchangerates.org/api/latest.json'
 
@@ -10,20 +10,20 @@ services:
         tags:
           - { name: twig.extension }
         arguments:
-          - %ongr_currency_exchange.twig.price_extension.currency.sign%
-          - %ongr_currency_exchange.twig.price_extension.currency.dec_point_separator%
-          - %ongr_currency_exchange.twig.price_extension.currency.thousands_separator%
-          - %ongr_currency_exchange.twig.price_extension.currency.currency_list_template%
-          - %ongr_currency_exchange.twig.price_extension.currency.price_list_template%
-          - %ongr_currency_exchange.twig.price_extension.currency.name%
-          - %ongr_currency_exchange.twig.price_extension.display_map%
-          - %ongr_currency_exchange.twig.price_extension.to_print_list%
+          - "%ongr_currency_exchange.twig.price_extension.currency.sign%"
+          - "%ongr_currency_exchange.twig.price_extension.currency.dec_point_separator%"
+          - "%ongr_currency_exchange.twig.price_extension.currency.thousands_separator%"
+          - "%ongr_currency_exchange.twig.price_extension.currency.currency_list_template%"
+          - "%ongr_currency_exchange.twig.price_extension.currency.price_list_template%"
+          - "%ongr_currency_exchange.twig.price_extension.currency.name%"
+          - "%ongr_currency_exchange.twig.price_extension.display_map%"
+          - "%ongr_currency_exchange.twig.price_extension.to_print_list%"
 
     ongr_currency_exchange.currency_exchange_service:
         class: ONGR\CurrencyExchangeBundle\Service\CurrencyExchangeService
         arguments:
             - "@ongr_currency_exchange.currency_rates_service"
-            - %ongr_currency_exchange.default_currency%
+            - "%ongr_currency_exchange.default_currency%"
 
     #guzzle client to use in drivers
     guzzle.client:
@@ -35,14 +35,14 @@ services:
         class: ONGR\CurrencyExchangeBundle\Driver\EcbDriver
         arguments:
           - "@guzzle.client"
-          - %ongr_currency_exchange.ecb_driver.url%
+          - "%ongr_currency_exchange.ecb_driver.url%"
 
     #Open exhange rates driver
     ongr_currency_exchange.open_exchange_driver:
         class: ONGR\CurrencyExchangeBundle\Driver\OpenExchangeRatesDriver
         arguments:
           - "@guzzle.client"
-          - %ongr_currency_exchange.ecb_driver.url%
+          - "%ongr_currency_exchange.ecb_driver.url%"
 
     ong_currency.cache_provider:
         class: Doctrine\Common\Cache\PhpFileCache
