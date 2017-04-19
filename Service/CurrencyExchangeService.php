@@ -48,7 +48,7 @@ class CurrencyExchangeService
      */
     public function getCurrencyRate($currency, $date = null)
     {
-        $rates = $this->rates->getRates($date);
+        $rates = $this->getCurrencies($date);
 
         if (isset($rates[$currency])) {
             return $rates[$currency];
@@ -58,11 +58,13 @@ class CurrencyExchangeService
     }
 
     /**
+     * @param string $date
+     *
      * @return array|null
      */
-    public function getCurrencies()
+    public function getCurrencies($date = null)
     {
-        return $this->rates->getRates();
+        return $this->rates->getRates($date);
     }
 
     /**
